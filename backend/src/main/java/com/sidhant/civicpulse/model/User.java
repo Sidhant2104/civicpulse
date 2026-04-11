@@ -3,6 +3,8 @@ package com.sidhant.civicpulse.model;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 
 @Entity
@@ -14,6 +16,7 @@ public class User {
     private String email;
     private String phoneNo;
     private String departmentId;
+    @Enumerated(EnumType.STRING)
     private Role role;
     private Level level;
     private LocalDateTime createdAt;

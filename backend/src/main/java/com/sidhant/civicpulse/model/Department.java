@@ -2,14 +2,21 @@ package com.sidhant.civicpulse.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
 
 @Entity
 public class Department {
     @Id
     private String id;
     private String name;
+    
+    public String getId() {
+        return id;
+    }
+    public String getName() {
+        return name;
+    }
+
+
+
 }
