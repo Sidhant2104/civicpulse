@@ -10,5 +10,4 @@ import com.sidhant.civicpulse.model.IssueStatusHistory;
 public interface IssueStatusHistoryRepository extends JpaRepository<IssueStatusHistory, String> {
 
     IssueStatusHistory findTopByIssueOrderByUpdatedAtDesc(Issue issue);
-
 }
