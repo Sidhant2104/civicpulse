@@ -1,13 +1,11 @@
 package com.sidhant.civicpulse.controller;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import com.sidhant.civicpulse.model.Issue;
+import com.sidhant.civicpulse.model.IssueStatusHistory;
+import org.springframework.web.bind.annotation.*;
 
 import com.sidhant.civicpulse.dto.CreateIssueRequestDto;
 import com.sidhant.civicpulse.dto.IssueResponseDto;
@@ -60,4 +58,60 @@ public class IssueController {
         return response;
     }
 
+    // 3. Get Issue History by issueId
+    @GetMapping("/issue/{id}/history")
+    public List<IssueStatusHistory> getIssueHistory(@PathVariable String id){
+        List<IssueStatusHistory> history = issueService.getIssueHistory(id);
+        return history;
+    }
+
+    // 4. Get all issues of currently logged-in citizen
+    @GetMapping("/issue/my")
+    public List<Issue> getMyIssues(@RequestBody User user){
+
+        // Call service layer to fetch citizen issues
+        List<Issue> issues =
+                issueService.getMyIssues(user);
+
+        // Return issue list response
+        return issues;
+    }
+
+    // 5. Get all issues assigned to the current official
+    @GetMapping("/issue/assigned")
+    public List<Issue> getAssignedIssues(@RequestBody User user){
+        List<Issue> issues = issueService.getAssignedIssues(user);
+        return issues;
+    }
+
+    // 6. Get all issues in the system
+    @GetMapping("/issue/all")
+    public List<Issue> getAllIssues(@RequestBody User user){
+
+        List<Issue> issues =
+                issueService.getAllIssues(user);
+
+        return issues;
+    }
+
+
+
+    // 7. Get single issue details
+    @GetMapping("/issue/{id}")
+    public Issue getIssueById(@PathVariable String id){
+
+        Issue issue = issueService.getIssueById(id);
+
+        return issue;
+    }
+
+    // 8. Get all issues whose latest status is ESCALATED
+    @GetMapping("/issue/escalated")
+    public List<Issue> getIssueWithEscalatedStatus(){
+
+        List<Issue> escalatedIssues =
+                issueService.getIssueWithEscalatedStatus();
+
+        return escalatedIssues;
+    }
 }

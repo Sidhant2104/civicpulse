@@ -1,10 +1,7 @@
 package com.sidhant.civicpulse.service;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import org.springframework.stereotype.Service;
 
@@ -176,4 +173,78 @@ public class IssueService {
 
     }
 
+    // Get Issue History by IssueID
+    public List<IssueStatusHistory> getIssueHistory(String issueId){
+        Issue issue = issueRepository.findById(issueId).orElseThrow(()->new RuntimeException("Issue Not Found"));
+        List<IssueStatusHistory> issueHistory =
+                issueStatusHistoryRepository.findByIssue(issue);
+        return issueHistory;
+    }
+
+    // Get all issues created by currently logged-in citizen
+    public List<Issue> getMyIssues(User user){
+
+        // Validate that only citizens can access this API
+        if(user.getRole() != Role.CITIZEN){
+            throw new RuntimeException(
+                    "Only citizens can access their issues"
+            );
+        }
+
+        // Fetch all issues created by this citizen
+        List<Issue> issues = issueRepository.findByCreatedBy(user);
+
+        // Return citizen's issues
+        return issues;
+    }
+
+    // Get all issues assigned to the current official
+    public List<Issue> getAssignedIssues(User user){
+        if(user.getRole() != Role.OFFICIAL){
+            throw new RuntimeException("Only officials can access issues assigned to them");
+        }
+
+        List<Issue> issues = issueRepository.findByAssignedTo(user);
+        return issues;
+    }
+
+    // Get all issues in the system for admin
+    public List<Issue> getAllIssues(User user){
+
+        if(user.getRole() != Role.ADMIN){
+            throw new RuntimeException(
+                    "Only admins can access all issues"
+            );
+        }
+
+        List<Issue> issues = issueRepository.findAll();
+
+        return issues;
+    }
+
+    // Get single issue details by issueId
+    public Issue getIssueById(String issueId){
+
+        Issue issue = issueRepository.findById(issueId)
+                .orElseThrow(
+                        () -> new RuntimeException("Issue not found")
+                );
+
+        return issue;
+    }
+
+    // Get all Issues with ESCALATED status
+    public List<Issue> getIssueWithEscalatedStatus(){
+        List<Issue> allIssues = issueRepository.findAll();
+        List<Issue> escalatedIssues = new ArrayList<>();
+        for(Issue  currIssue : allIssues){
+            IssueStatusHistory latestHistory = issueStatusHistoryRepository
+                    .findTopByIssueOrderByUpdatedAtDesc(currIssue);
+
+            if(latestHistory.getStatus() == IssueStatus.ESCALATED){
+                escalatedIssues.add(currIssue);
+            }
+        }
+        return escalatedIssues;
+    }
 }
