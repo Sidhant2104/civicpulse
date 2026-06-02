@@ -7,6 +7,8 @@ import com.sidhant.civicpulse.model.Level;
 import com.sidhant.civicpulse.model.Role;
 import com.sidhant.civicpulse.model.User;
 
+import java.util.Optional;
+
 @Repository
 public interface UserRepo extends JpaRepository<User,String> {
     User findTopByDepartmentIdAndRoleOrderByLevelAsc(String departmentId, Role role);
@@ -14,4 +16,5 @@ public interface UserRepo extends JpaRepository<User,String> {
     String departmentId, Level level, Role role
 );
     User findByDepartmentIdAndLevelAndRole(String DepartmentId, Level level, Role role);
+    Optional<User> findByEmail(String email);
 }

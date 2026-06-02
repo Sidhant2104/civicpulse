@@ -27,7 +27,6 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println("DATA INITIALIZER RUNNING");
         if (userRepo.count() > 0) {
             return;
         }
