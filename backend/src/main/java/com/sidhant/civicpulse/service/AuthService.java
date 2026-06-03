@@ -7,6 +7,8 @@ import com.sidhant.civicpulse.dto.SignupResponseDto;
 import com.sidhant.civicpulse.model.Role;
 import com.sidhant.civicpulse.model.User;
 import com.sidhant.civicpulse.repository.UserRepo;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -19,10 +21,12 @@ public class AuthService {
     private UserRepo userRepo;
     private PasswordEncoder passwordEncoder;
     private JwtService jwtService;
-    public AuthService(UserRepo userRepo, PasswordEncoder passwordEncoder, JwtService jwtService){
+    private AuthenticationManager authenticationManager;
+    public AuthService(UserRepo userRepo, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager){
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
+        this.authenticationManager = authenticationManager;
     }
 
 
@@ -55,22 +59,17 @@ public class AuthService {
     }
 
     // 2: LOGIN USER:
-
     public LoginResponseDto LoginUser(LoginRequestDto request){
+
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getEmail(),
+                        request.getPassword()
+                ));
+
         User user = userRepo.findByEmail(request.getEmail())
                 .orElseThrow(()-> new RuntimeException("Invalid email or password")); // just to be safe from  attackers
         // who can enumerate email
-
-        System.out.println(
-                passwordEncoder.matches(
-                        request.getPassword(),
-                        user.getPassword()
-                )
-        );
-
-        if(!passwordEncoder.matches(request.getPassword(), user.getPassword())){
-            throw new RuntimeException("Invalid email or password");
-        }
 
         String token = jwtService.generateToken(user);
         LoginResponseDto response = new LoginResponseDto();
