@@ -27,7 +27,12 @@ public class SecurityConfig {
         http.csrf(csrf->csrf.disable());
         http.authorizeHttpRequests(auth ->auth.requestMatchers("/swagger-ui/**",
                 "/v3/api-docs/**",
-                "/auth/**").permitAll().anyRequest().authenticated());
+                "/auth/**").permitAll()
+                .requestMatchers("/admin/**")
+                .hasAuthority("ADMIN")
+                .requestMatchers("/official/**")
+                .hasAnyAuthority("ADMIN", "OFFICIAL")
+                .anyRequest().authenticated());
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class );
         return http.build();
     }
