@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.sidhant.civicpulse.model.Issue;
 import com.sidhant.civicpulse.model.IssueStatusHistory;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import com.sidhant.civicpulse.dto.CreateIssueRequestDto;
@@ -29,24 +31,30 @@ public class IssueController {
 
     // 1: Create Issue
     @PostMapping("/issue")
-    public IssueResponseDto createIssue(@RequestBody CreateIssueRequestDto dto,
-            @RequestHeader("X-USER-ROLE") String role) {
-        return issueService.createIssue(dto, role);
+    public IssueResponseDto createIssue(
+            @RequestBody CreateIssueRequestDto dto) {
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        String email = authentication.getName();
+
+        return issueService.createIssue(dto, email);
     }
 
     // 2: Update Issue Status :
     @PatchMapping("/issue/{issueId}/status")
     public UpdateIssueStatusResponseDto updateIssueStatus(
             @PathVariable String issueId,
-            @RequestBody UpdateIssueStatusRequestDto dto,
-            @RequestHeader("X-USER-ID") String userId) {
+            @RequestBody UpdateIssueStatusRequestDto dto) {
+
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        String email = authentication.getName();
 
         IssueStatus next = IssueStatus.valueOf(dto.getStatus());
 
-        User user = userRepo.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-
-        issueService.updateIssueStatus(issueId, user, next);
+        issueService.updateIssueStatus(issueId, email, next);
 
         UpdateIssueStatusResponseDto response = new UpdateIssueStatusResponseDto();
 
@@ -67,31 +75,38 @@ public class IssueController {
 
     // 4. Get all issues of currently logged-in citizen
     @GetMapping("/issue/my")
-    public List<Issue> getMyIssues(@RequestBody User user){
+    public List<Issue> getMyIssues(){
 
-        // Call service layer to fetch citizen issues
-        List<Issue> issues =
-                issueService.getMyIssues(user);
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
 
-        // Return issue list response
-        return issues;
+        String email = authentication.getName();
+
+        return issueService.getMyIssues(email);
     }
 
     // 5. Get all issues assigned to the current official
     @GetMapping("/issue/assigned")
-    public List<Issue> getAssignedIssues(@RequestBody User user){
-        List<Issue> issues = issueService.getAssignedIssues(user);
-        return issues;
+    public List<Issue> getAssignedIssues() {
+
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        String email = authentication.getName();
+
+        return issueService.getAssignedIssues(email);
     }
 
     // 6. Get all issues in the system
     @GetMapping("/issue/all")
-    public List<Issue> getAllIssues(@RequestBody User user){
+    public List<Issue> getAllIssues() {
 
-        List<Issue> issues =
-                issueService.getAllIssues(user);
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
 
-        return issues;
+        String email = authentication.getName();
+
+        return issueService.getAllIssues(email);
     }
 
 

@@ -75,12 +75,16 @@ public class IssueService {
         }
     }
 
-    public IssueResponseDto createIssue(CreateIssueRequestDto dto, String role) {
+
+    // Create Issue
+    public IssueResponseDto createIssue(CreateIssueRequestDto dto, String email) {
 
         // VALIDATION
-        if (!"CITIZEN".equalsIgnoreCase(role.trim())) {
-            System.out.println("ROLE FROM HEADER: " + role);
-            throw new RuntimeException("Only Citizen can create issue.");
+        User citizen = userRepo.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (citizen.getRole() != Role.CITIZEN) {
+            throw new RuntimeException("Only citizens can create issues");
         }
 
         String description = dto.getDescription(); // getting description
@@ -113,6 +117,7 @@ public class IssueService {
         issue.setDepartment(departmentObj);
         issue.setAssignedTo(official);
         issue.setCreatedAt(LocalDateTime.now());
+        issue.setCreatedBy(citizen);
 
         if (dto.getPriority() == null) {
             issue.setPriority(Priority.MEDIUM);
@@ -126,7 +131,7 @@ public class IssueService {
         history.setId(UUID.randomUUID().toString());
         history.setIssue(issue);
         history.setStatus(IssueStatus.CREATED);
-        history.setUpdatedBy(official); // or creator
+        history.setUpdatedBy(citizen); // or creator
         history.setUpdatedAt(LocalDateTime.now());
 
         issueStatusHistoryRepository.save(history);
@@ -139,7 +144,10 @@ public class IssueService {
 
     // Issue Status Update System
 
-    public UpdateIssueStatusResponseDto updateIssueStatus(String issueId, User user, IssueStatus next) {
+    public UpdateIssueStatusResponseDto updateIssueStatus(String issueId, String email, IssueStatus next) {
+        User user = userRepo.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
         Issue issue = issueRepository.findById(issueId).orElseThrow(() -> new RuntimeException("Issue not found"));
         IssueStatusHistory latest = issueStatusHistoryRepository.findTopByIssueOrderByUpdatedAtDesc(issue);
         IssueStatus currentStatus;
@@ -182,7 +190,9 @@ public class IssueService {
     }
 
     // Get all issues created by currently logged-in citizen
-    public List<Issue> getMyIssues(User user){
+    public List<Issue> getMyIssues(String email){
+        User user = userRepo.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         // Validate that only citizens can access this API
         if(user.getRole() != Role.CITIZEN){
@@ -199,17 +209,27 @@ public class IssueService {
     }
 
     // Get all issues assigned to the current official
-    public List<Issue> getAssignedIssues(User user){
+    public List<Issue> getAssignedIssues(String email){
+
+        User user = userRepo.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
         if(user.getRole() != Role.OFFICIAL){
-            throw new RuntimeException("Only officials can access issues assigned to them");
+            throw new RuntimeException(
+                    "Only officials can access issues assigned to them"
+            );
         }
 
         List<Issue> issues = issueRepository.findByAssignedTo(user);
+
         return issues;
     }
 
     // Get all issues in the system for admin
-    public List<Issue> getAllIssues(User user){
+    public List<Issue> getAllIssues(String email){
+
+        User user = userRepo.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         if(user.getRole() != Role.ADMIN){
             throw new RuntimeException(
@@ -217,9 +237,7 @@ public class IssueService {
             );
         }
 
-        List<Issue> issues = issueRepository.findAll();
-
-        return issues;
+        return issueRepository.findAll();
     }
 
     // Get single issue details by issueId
@@ -241,7 +259,9 @@ public class IssueService {
             IssueStatusHistory latestHistory = issueStatusHistoryRepository
                     .findTopByIssueOrderByUpdatedAtDesc(currIssue);
 
-            if(latestHistory.getStatus() == IssueStatus.ESCALATED){
+            if(latestHistory != null &&
+                    latestHistory.getStatus() == IssueStatus.ESCALATED)
+            {
                 escalatedIssues.add(currIssue);
             }
         }
