@@ -143,7 +143,6 @@ public class IssueService {
     }
 
     // Issue Status Update System
-
     public UpdateIssueStatusResponseDto updateIssueStatus(String issueId, String email, IssueStatus next) {
         User user = userRepo.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -168,6 +167,12 @@ public class IssueService {
         history.setUpdatedBy(user);
         history.setUpdatedAt(LocalDateTime.now());
 
+        if (next == IssueStatus.CLOSED) {
+            issue.setClosedAt(LocalDateTime.now());
+            issue.setClosedBy(user.getId());
+
+            issueRepository.save(issue);
+        }
         issueStatusHistoryRepository.save(history);
 
         UpdateIssueStatusResponseDto response = new UpdateIssueStatusResponseDto();

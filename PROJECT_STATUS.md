@@ -74,9 +74,9 @@
 
 ## 🔧 Pending Fixes
 
-- [ ] Populate closedAt when issue closes
-- [ ] Populate closedBy when issue closes
-- [ ] Change CREATED history updatedBy from official → citizen
+- [x] Populate closedAt when issue closes
+- [x] Populate closedBy when issue closes
+- [x] Change CREATED history updatedBy from official → citizen
 - [ ] Secure getIssueById()
 - [ ] Null safety in getIssueWithEscalatedStatus()
 
