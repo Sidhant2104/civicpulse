@@ -77,8 +77,8 @@
 - [x] Populate closedAt when issue closes
 - [x] Populate closedBy when issue closes
 - [x] Change CREATED history updatedBy from official → citizen
-- [ ] Secure getIssueById()
-- [ ] Null safety in getIssueWithEscalatedStatus()
+- [x] Secure getIssueById()
+- [x] Null safety in getIssueWithEscalatedStatus()
 
 ---
 

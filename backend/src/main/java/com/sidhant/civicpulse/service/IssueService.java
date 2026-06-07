@@ -246,14 +246,32 @@ public class IssueService {
     }
 
     // Get single issue details by issueId
-    public Issue getIssueById(String issueId){
+    public Issue getIssueById(String issueId, String email){
 
-        Issue issue = issueRepository.findById(issueId)
-                .orElseThrow(
-                        () -> new RuntimeException("Issue not found")
-                );
+        User user = userRepo.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return issue;
+        Issue issue = issueRepository.findById(issueId).orElseThrow(() ->
+                        new RuntimeException("Issue not found"));
+        if (user.getRole() == Role.ADMIN) {
+            return issue;
+        }
+
+        if (user.getRole() == Role.OFFICIAL) {
+            if (!issue.getAssignedTo().getId().equals(user.getId())) {
+                throw new RuntimeException("Access denied");
+            }
+            return issue;
+        }
+
+        if (user.getRole() == Role.CITIZEN) {
+            if (!issue.getCreatedBy().getId().equals(user.getId())) {
+                throw new RuntimeException("Access denied");
+            }
+            return issue;
+        }
+        throw new RuntimeException("Access denied");
+
     }
 
     // Get all Issues with ESCALATED status
@@ -264,8 +282,7 @@ public class IssueService {
             IssueStatusHistory latestHistory = issueStatusHistoryRepository
                     .findTopByIssueOrderByUpdatedAtDesc(currIssue);
 
-            if(latestHistory != null &&
-                    latestHistory.getStatus() == IssueStatus.ESCALATED)
+            if(latestHistory != null && latestHistory.getStatus() == IssueStatus.ESCALATED)
             {
                 escalatedIssues.add(currIssue);
             }

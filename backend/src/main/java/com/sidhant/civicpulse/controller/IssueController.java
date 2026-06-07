@@ -115,9 +115,12 @@ public class IssueController {
     @GetMapping("/issue/{id}")
     public Issue getIssueById(@PathVariable String id){
 
-        Issue issue = issueService.getIssueById(id);
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
 
-        return issue;
+        String email = authentication.getName();
+
+        return issueService.getIssueById(id, email);
     }
 
     // 8. Get all issues whose latest status is ESCALATED
