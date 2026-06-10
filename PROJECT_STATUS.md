@@ -86,7 +86,7 @@
 
 ### Dashboards
 
-- [ ] Citizen Dashboard
+- [x] Citizen Dashboard
 - [ ] Official Dashboard
 - [ ] Admin Dashboard
 
