@@ -1,6 +1,7 @@
 package com.sidhant.civicpulse.controller;
 
 import com.sidhant.civicpulse.dto.CitizenDashboardResponseDto;
+import com.sidhant.civicpulse.dto.OfficialDashboardResponseDto;
 import com.sidhant.civicpulse.service.DashboardService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,5 +24,16 @@ public class DashboardController {
 
         String email = authentication.getName();
         return dashboardService.getCitizenDashboard(email);
+    }
+
+    @GetMapping("/dashboard/official")
+    public OfficialDashboardResponseDto getOfficialDashboard() {
+
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        String email = authentication.getName();
+
+        return dashboardService.getOfficialDashboard(email);
     }
 }

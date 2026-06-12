@@ -1,10 +1,12 @@
 package com.sidhant.civicpulse.service;
 
 import com.sidhant.civicpulse.dto.CitizenDashboardResponseDto;
+import com.sidhant.civicpulse.dto.OfficialDashboardResponseDto;
 import com.sidhant.civicpulse.model.*;
 import com.sidhant.civicpulse.repository.IssueRepository;
 import com.sidhant.civicpulse.repository.IssueStatusHistoryRepository;
 import com.sidhant.civicpulse.repository.UserRepo;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -84,6 +86,59 @@ public class DashboardService {
         response.setClosedIssues(closedIssues);
         response.setEscalatedIssues(escalatedIssues);
         response.setSlaBreachedIssues(slaBreachedIssues);
+
+        return response;
+    }
+
+
+    public OfficialDashboardResponseDto getOfficialDashboard(String email){
+        User user = userRepo.findByEmail(email).orElseThrow(()-> new RuntimeException("User not found"));
+
+        if(user.getRole() != Role.OFFICIAL){
+            throw new RuntimeException("Only officials can access Official Dashboard");
+        }
+
+        List<Issue> issues = issueRepository.findByAssignedTo(user);
+
+        int assignedIssues = issues.size();
+
+        int inProgressIssues = 0;
+        int resolvedIssues = 0;
+        int escalatedIssues = 0;
+        int closedIssues = 0;
+
+        for(Issue issue : issues){
+            IssueStatusHistory latestHistory = issueStatusHistoryRepository.findTopByIssueOrderByUpdatedAtDesc(issue);
+            if(latestHistory == null){
+                continue;
+            }
+             IssueStatus  status = latestHistory.getStatus();
+            switch(status){
+                case CREATED:
+                case IN_PROGRESS:
+                    inProgressIssues++;
+                    break;
+
+                case ESCALATED:
+                    escalatedIssues++;
+                    break;
+
+                case RESOLVED:
+                    resolvedIssues++;
+                    break;
+
+                case CLOSED:
+                    closedIssues++;
+                    break;
+            }
+        }
+
+        OfficialDashboardResponseDto response = new OfficialDashboardResponseDto();
+        response.setAssignedIssues(assignedIssues);
+        response.setInProgressIssues(inProgressIssues);
+        response.setResolvedIssues(resolvedIssues);
+        response.setEscalatedIssues(escalatedIssues);
+        response.setClosedIssues(closedIssues);
 
         return response;
     }
