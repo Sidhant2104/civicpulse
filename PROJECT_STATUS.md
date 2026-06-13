@@ -87,7 +87,7 @@
 ### Dashboards
 
 - [x] Citizen Dashboard
-- [ ] Official Dashboard
+- [x] Official Dashboard
 - [ ] Admin Dashboard
 
 ### Analytics
