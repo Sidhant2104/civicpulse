@@ -112,3 +112,9 @@
 - [ ] My Issues Page
 - [ ] Official Dashboard
 - [ ] Admin Dashboard
+
+### Testing
+
+- [x] Citizen Dashboard Testing
+- [ ] Official Dashboard Testing
+- [ ] End-to-End Dashboard Testing
