@@ -13,7 +13,7 @@ import com.sidhant.civicpulse.model.User;
 import com.sidhant.civicpulse.repository.DepartmentRepository;
 import com.sidhant.civicpulse.repository.UserRepo;
 
-@Component
+//@Component
 public class DataInitializer implements CommandLineRunner {
 
     private final UserRepo userRepo;
