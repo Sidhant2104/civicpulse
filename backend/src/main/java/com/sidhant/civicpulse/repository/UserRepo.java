@@ -12,9 +12,8 @@ import java.util.Optional;
 @Repository
 public interface UserRepo extends JpaRepository<User,String> {
     User findTopByDepartmentIdAndRoleOrderByLevelAsc(String departmentId, Role role);
-    boolean existsByDepartmentIdAndLevelAndRole(
-    String departmentId, Level level, Role role
-);
+    boolean existsByDepartmentIdAndLevelAndRole(String departmentId, Level level, Role role);
     User findByDepartmentIdAndLevelAndRole(String DepartmentId, Level level, Role role);
     Optional<User> findByEmail(String email);
+    boolean existsByDepartmentId(String departmentId);
 }
