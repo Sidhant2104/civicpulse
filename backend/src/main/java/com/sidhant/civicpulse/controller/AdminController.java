@@ -15,25 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/admin")
 public class AdminController {
 
-    private AuthService authService;
 
-    public AdminController(AuthService authService) {
-        this.authService = authService;
-    }
-
-    @PostMapping("/officials")
-    public CreateOfficialResponseDto createOfficial(
-            @RequestBody CreateOfficialRequestDto request){
-
-        Authentication authentication =
-                SecurityContextHolder.getContext().getAuthentication();
-
-        String adminEmail = authentication.getName();
-
-        return authService.createOfficial(
-                request,
-                adminEmail
-        );
-    }
 
 }

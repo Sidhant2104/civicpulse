@@ -57,10 +57,19 @@
 * [x] Get Assigned Issues
 * [x] Update Issue Status
 
+### Official Management
+
+* [x] Create Official API
+* [x] View Officials API
+* [x] Official Response DTO
+
 ### Admin APIs
 
 * [x] Get All Issues
 * [x] Create Department API
+* [x] Get All Departments API
+* [x] Update Department API
+* [x] Delete Department API
 
 ### JWT Refactor
 
@@ -90,6 +99,11 @@
 * [ ] Standardize all Department IDs to UUIDs
 * [ ] Recreate officials using UUID-based department IDs
 
+### Official Data Cleanup
+
+* [ ] Remove legacy officials with null email/phone fields
+* [ ] Recreate officials through Create Official API
+
 ### Validation & Error Handling
 
 * [ ] Add Bean Validation (@NotBlank, @Email, @Size)
@@ -102,7 +116,9 @@
 
 * [ ] Replace keyword-based department detection with department selection
 * [ ] Introduce standard API response wrapper
-* [ ] Implement soft delete for officials
+* [ ] Add isActive flag to User entity
+* [ ] Implement Official Deactivation API
+* [ ] Exclude inactive officials from assignment logic
 
 ---
 
@@ -130,10 +146,10 @@
 
 ### Administration
 
-* [ ] Create Official API
-* [ ] View Officials API
-* [ ] Update Official API
-* [ ] Delete Official API
+* [x] Create Official API
+* [x] View Officials API
+* [x] Update Official API
+* [ ] Soft Delete / Deactivate Official
 
 ### Search & Pagination
 
@@ -160,8 +176,8 @@
 ### Testing
 
 * [x] Citizen Dashboard Testing
-* [ ] Official Dashboard Testing
-* [ ] Department API Testing
+* [x] Official Dashboard Testing
+* [x] Department API Testing
 * [ ] End-to-End Dashboard Testing
 
 ### Deployment

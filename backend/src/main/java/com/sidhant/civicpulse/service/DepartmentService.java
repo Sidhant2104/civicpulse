@@ -73,16 +73,11 @@ public class DepartmentService {
         if(userRepo.existsByDepartmentId(departmentId)){
             throw new RuntimeException("Department has assigned users");
         }
-
         departmentRepository.delete(department);
 
         //response
         DeleteDepartmentResponseDto response = new DeleteDepartmentResponseDto();
-
-        response.setMessage(
-                "Department deleted successfully"
-        );
-
+        response.setMessage("Department deleted successfully");
         return response;
     }
 
