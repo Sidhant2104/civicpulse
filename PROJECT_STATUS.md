@@ -135,7 +135,7 @@
 
 * [x] Citizen Dashboard
 * [x] Official Dashboard
-* [ ] Admin Dashboard
+* [X] Admin Dashboard
 
 ### Analytics
 

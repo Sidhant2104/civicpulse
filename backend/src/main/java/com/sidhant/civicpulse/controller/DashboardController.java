@@ -1,5 +1,6 @@
 package com.sidhant.civicpulse.controller;
 
+import com.sidhant.civicpulse.dto.AdminDashboardResponseDto;
 import com.sidhant.civicpulse.dto.CitizenDashboardResponseDto;
 import com.sidhant.civicpulse.dto.OfficialDashboardResponseDto;
 import com.sidhant.civicpulse.service.DashboardService;
@@ -16,7 +17,7 @@ public class DashboardController {
     public DashboardController(DashboardService dashboardService) {
         this.dashboardService = dashboardService;
     }
-
+    //1:Citizen Dashboard Controller
     @GetMapping("/dashboard/citizen")
     public CitizenDashboardResponseDto getCitizenDashboard(){
         Authentication authentication =
@@ -26,14 +27,21 @@ public class DashboardController {
         return dashboardService.getCitizenDashboard(email);
     }
 
+    //2: Official Dashboard Controller
     @GetMapping("/dashboard/official")
     public OfficialDashboardResponseDto getOfficialDashboard() {
-
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
-
         String email = authentication.getName();
-
         return dashboardService.getOfficialDashboard(email);
+    }
+
+    //3: Admin Dashboard Controller
+    @GetMapping("/admin")
+    public AdminDashboardResponseDto getAdminDashboard(){
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        return dashboardService.getAdminDashboard(email);
     }
 }
