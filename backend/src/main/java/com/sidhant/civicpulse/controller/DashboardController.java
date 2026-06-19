@@ -1,13 +1,13 @@
 package com.sidhant.civicpulse.controller;
 
-import com.sidhant.civicpulse.dto.AdminDashboardResponseDto;
-import com.sidhant.civicpulse.dto.CitizenDashboardResponseDto;
-import com.sidhant.civicpulse.dto.OfficialDashboardResponseDto;
+import com.sidhant.civicpulse.dto.*;
 import com.sidhant.civicpulse.service.DashboardService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class DashboardController {
@@ -43,5 +43,19 @@ public class DashboardController {
                 SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         return dashboardService.getAdminDashboard(email);
+    }
+
+    //------------------------------------------------------------------------------------//
+
+    //1: Get issue statistics:
+    @GetMapping("/admin/stats/issues")
+    public IssueStatisticsResponseDto getIssueStatistics(){
+        return dashboardService.getIssueStatistics();
+    }
+
+    //2: Department Statistics
+    @GetMapping("/admin/stats/departments")
+    public List<DepartmentStatisticsResponseDto> getDepartmentStatistics(){
+        return dashboardService.getDepartmentStatistics();
     }
 }

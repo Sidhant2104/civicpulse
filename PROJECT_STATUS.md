@@ -139,8 +139,8 @@
 
 ### Analytics
 
-* [ ] Issue Statistics
-* [ ] Department Statistics
+* [x] Issue Statistics
+* [] Department Statistics
 * [ ] Escalation Statistics
 * [ ] SLA Statistics
 

@@ -1,8 +1,6 @@
 package com.sidhant.civicpulse.service;
 
-import com.sidhant.civicpulse.dto.AdminDashboardResponseDto;
-import com.sidhant.civicpulse.dto.CitizenDashboardResponseDto;
-import com.sidhant.civicpulse.dto.OfficialDashboardResponseDto;
+import com.sidhant.civicpulse.dto.*;
 import com.sidhant.civicpulse.model.*;
 import com.sidhant.civicpulse.repository.DepartmentRepository;
 import com.sidhant.civicpulse.repository.IssueRepository;
@@ -11,6 +9,7 @@ import com.sidhant.civicpulse.repository.UserRepo;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -217,6 +216,157 @@ public class DashboardService {
         response.setTotalCitizens(totalCitizens);
         response.setTotalOfficials(totalOfficials);
         response.setTotalDepartments(totalDepartments);
+        return response;
+    }
+
+//--------------------------------------------------------------------------------------
+    //1: Issue Statistics
+    public IssueStatisticsResponseDto getIssueStatistics(){
+        List<Issue> issues = issueRepository.findAll();
+        int totalIssues = issues.size();
+
+        int openIssues = 0;
+        int resolvedIssues = 0;
+        int closedIssues = 0;
+        int escalatedIssues = 0;
+        int slaBreachedIssues = 0;
+
+        for(Issue issue : issues){
+
+            IssueStatusHistory latestHistory =
+                    issueStatusHistoryRepository
+                            .findTopByIssueOrderByUpdatedAtDesc(issue);
+
+            if(latestHistory == null){
+                continue;
+            }
+
+            IssueStatus status = latestHistory.getStatus();
+
+            switch(status){
+
+                case CREATED:
+                case IN_PROGRESS:
+                    openIssues++;
+                    break;
+
+                case RESOLVED:
+                    resolvedIssues++;
+                    break;
+
+                case CLOSED:
+                    closedIssues++;
+                    break;
+
+                case ESCALATED:
+                    escalatedIssues++;
+                    break;
+
+                case SLA_BREACHED:
+                    slaBreachedIssues++;
+                    break;
+            }
+        }
+
+        IssueStatisticsResponseDto response =
+                new IssueStatisticsResponseDto();
+
+        response.setTotalIssues(totalIssues);
+        response.setOpenIssues(openIssues);
+        response.setResolvedIssues(resolvedIssues);
+        response.setClosedIssues(closedIssues);
+        response.setEscalatedIssues(escalatedIssues);
+        response.setSlaBreachedIssues(slaBreachedIssues);
+        return response;
+    }
+
+    //2: Department Statistics
+    public List<DepartmentStatisticsResponseDto> getDepartmentStatistics(){
+        List<Department> departments= departmentRepository.findAll();
+
+        List<DepartmentStatisticsResponseDto> response = new ArrayList<>();
+
+        List<Issue> issues = issueRepository.findAll();
+
+        for(Department department: departments){
+            int totalIssues = 0;
+            int openIssues = 0;
+            int resolvedIssues = 0;
+            int closedIssues = 0;
+            int escalatedIssues = 0;
+            int slaBreachedIssues = 0;
+
+
+            for(Issue issue : issues){
+                if(!issue.getDepartment().getId().equals(department.getId())){
+                    continue;
+                }
+                totalIssues++;
+
+                IssueStatusHistory latestHistory = issueStatusHistoryRepository.findTopByIssueOrderByUpdatedAtDesc(issue);
+                if(latestHistory == null){
+                    continue;
+                }
+                IssueStatus status = latestHistory.getStatus();
+
+                switch(status){
+
+                    case CREATED:
+                    case IN_PROGRESS:
+                        openIssues++;
+                        break;
+
+                    case RESOLVED:
+                        resolvedIssues++;
+                        break;
+
+                    case CLOSED:
+                        closedIssues++;
+                        break;
+
+                    case ESCALATED:
+                        escalatedIssues++;
+                        break;
+
+                    case SLA_BREACHED:
+                        slaBreachedIssues++;
+                        break;
+                }
+            }
+
+            DepartmentStatisticsResponseDto dto =
+                    new DepartmentStatisticsResponseDto();
+
+            dto.setDepartmentName(department.getName());
+
+            dto.setTotalIssues(totalIssues);
+            dto.setOpenIssues(openIssues);
+            dto.setResolvedIssues(resolvedIssues);
+            dto.setClosedIssues(closedIssues);
+            dto.setEscalatedIssues(escalatedIssues);
+            dto.setSlaBreachedIssues(slaBreachedIssues);
+
+            double resolutionRate = 0;
+
+            if(totalIssues > 0){
+                resolutionRate = ((double)(resolvedIssues + closedIssues) / totalIssues) * 100;
+            }
+
+            double slaComplianceRate;
+
+            if(totalIssues == 0){
+                slaComplianceRate = 100.0;
+            }
+            else{
+                slaComplianceRate = ((double)(totalIssues - slaBreachedIssues) / totalIssues) * 100;
+            }
+
+            dto.setResolutionRate(resolutionRate);
+            dto.setSlaComplianceRate(slaComplianceRate);
+
+            response.add(dto);
+        }
+
         return response;
     }
 }
