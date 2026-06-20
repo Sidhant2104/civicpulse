@@ -2,10 +2,12 @@ package com.sidhant.civicpulse.model;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
 public class IssueStatusHistory {
 
@@ -22,43 +24,10 @@ public class IssueStatusHistory {
 
     private LocalDateTime updatedAt;
 
-    public String getId() {
-    return id;
-}
+    @Enumerated(EnumType.STRING)
+    private Level fromLevel;
 
-public void setId(String id) {
-    this.id = id;
-}
+    @Enumerated(EnumType.STRING)
+    private Level toLevel;
 
-public Issue getIssue() {
-    return issue;
-}
-
-public void setIssue(Issue issue) {
-    this.issue = issue;
-}
-
-public IssueStatus getStatus() {
-    return status;
-}
-
-public void setStatus(IssueStatus status) {
-    this.status = status;
-}
-
-public User getUpdatedBy() {
-    return updatedBy;
-}
-
-public void setUpdatedBy(User updatedBy) {
-    this.updatedBy = updatedBy;
-}
-
-public LocalDateTime getUpdatedAt() {
-    return updatedAt;
-}
-
-public void setUpdatedAt(LocalDateTime updatedAt) {
-    this.updatedAt = updatedAt;
-}
 }

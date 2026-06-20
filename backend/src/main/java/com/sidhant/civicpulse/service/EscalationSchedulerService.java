@@ -79,7 +79,7 @@ public class EscalationSchedulerService {
 
                         issueRepository.save(issue);
 
-                        createHistoryEntry(issue, IssueStatus.ESCALATED);
+                        createEscalationHistoryEntry(issue, currentLevel, nextLevel);
 
                         logger.info("Issue {} escalated from {} to {}", issue.getIssueId(), currentLevel, nextLevel);
 
@@ -115,6 +115,27 @@ public class EscalationSchedulerService {
         history.setUpdatedBy(null);
 
         history.setId(UUID.randomUUID().toString());
+
+        issueStatusHistoryRepository.save(history);
+    }
+
+
+    public void createEscalationHistoryEntry(
+            Issue issue,
+            Level fromLevel,
+            Level toLevel
+    ){
+        IssueStatusHistory history =
+                new IssueStatusHistory();
+
+        history.setIssue(issue);
+        history.setStatus(IssueStatus.ESCALATED);
+        history.setUpdatedAt(LocalDateTime.now());
+        history.setUpdatedBy(null);
+        history.setId(UUID.randomUUID().toString());
+
+        history.setFromLevel(fromLevel);
+        history.setToLevel(toLevel);
 
         issueStatusHistoryRepository.save(history);
     }

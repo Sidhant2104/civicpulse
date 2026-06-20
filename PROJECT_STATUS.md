@@ -140,7 +140,7 @@
 ### Analytics
 
 * [x] Issue Statistics
-* [] Department Statistics
+* [x] Department Statistics
 * [ ] Escalation Statistics
 * [ ] SLA Statistics
 
