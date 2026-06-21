@@ -87,17 +87,41 @@ public class IssueService {
             throw new RuntimeException("Only citizens can create issues");
         }
 
-        String description = dto.getDescription(); // getting description
-        String desc = description.toLowerCase();// converting to lowercase
+        String description = dto.getDescription();
+        String desc = description.toLowerCase();
+
         String department;
 
-        if (desc.contains("water")) {
+        if (desc.contains("water")
+                || desc.contains("pipeline")
+                || desc.contains("leakage")) {
+
             department = "WATER";
-        } else if (desc.contains("light") || desc.contains("electric")) {
+
+        } else if (desc.contains("light")
+                || desc.contains("electric")
+                || desc.contains("pole")
+                || desc.contains("power")) {
+
             department = "ELECTRICITY";
-        } else if (desc.contains("garbage") || desc.contains("waste")) {
+
+        } else if (desc.contains("road")
+                || desc.contains("pothole")
+                || desc.contains("street")
+                || desc.contains("highway")
+                || desc.contains("crack")) {
+
+            department = "ROADS";
+
+        } else if (desc.contains("garbage")
+                || desc.contains("waste")
+                || desc.contains("dustbin")
+                || desc.contains("cleaning")) {
+
             department = "SANITATION";
+
         } else {
+
             department = "GENERAL";
         }
 
