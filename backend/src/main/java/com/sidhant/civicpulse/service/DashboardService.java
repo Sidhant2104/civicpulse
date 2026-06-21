@@ -369,4 +369,51 @@ public class DashboardService {
 
         return response;
     }
+
+
+    // 3: Escalation Statistics
+    public EscalationStatisticsResponseDto getEscalationStatistics(){
+        List<IssueStatusHistory> histories =
+                issueStatusHistoryRepository.findAll();
+        int totalEscalatedIssues = 0;
+
+        int level1To2Escalations = 0;
+        int level2To3Escalations = 0;
+        int level3To4Escalations = 0;
+        for(IssueStatusHistory history : histories){
+            if(history.getStatus() != IssueStatus.ESCALATED){
+                continue;
+            }
+            totalEscalatedIssues++;
+
+            Level fromLevel = history.getFromLevel();
+            Level toLevel = history.getToLevel();
+
+            if(fromLevel == Level.LEVEL_1 &&
+                    toLevel == Level.LEVEL_2){
+
+                level1To2Escalations++;
+            }
+
+            else if(fromLevel == Level.LEVEL_2 &&
+                    toLevel == Level.LEVEL_3){
+
+                level2To3Escalations++;
+            }
+
+            else if(fromLevel == Level.LEVEL_3 &&
+                    toLevel == Level.LEVEL_4){
+
+                level3To4Escalations++;
+            }
+        }
+        EscalationStatisticsResponseDto response =
+                new EscalationStatisticsResponseDto();
+        response.setTotalEscalatedIssues(totalEscalatedIssues);
+
+        response.setLevel1To2Escalations(level1To2Escalations);
+        response.setLevel2To3Escalations(level2To3Escalations);
+        response.setLevel3To4Escalations(level3To4Escalations);
+        return response;
+    }
 }

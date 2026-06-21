@@ -58,4 +58,10 @@ public class DashboardController {
     public List<DepartmentStatisticsResponseDto> getDepartmentStatistics(){
         return dashboardService.getDepartmentStatistics();
     }
+
+    //3: Escalation Statistics
+    @GetMapping("/admin/stats/escalations")
+    public EscalationStatisticsResponseDto getEscalationStatistics(){
+        return dashboardService.getEscalationStatistics();
+    }
 }
