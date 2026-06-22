@@ -141,7 +141,7 @@
 
 * [x] Issue Statistics
 * [x] Department Statistics
-* [ ] Escalation Statistics
+* [x] Escalation Statistics
 * [ ] SLA Statistics
 
 ### Administration

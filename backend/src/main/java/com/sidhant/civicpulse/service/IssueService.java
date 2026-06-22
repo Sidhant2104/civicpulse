@@ -191,6 +191,13 @@ public class IssueService {
         history.setUpdatedBy(user);
         history.setUpdatedAt(LocalDateTime.now());
 
+        if (next == IssueStatus.RESOLVED) {
+
+            issue.setResolvedAt(LocalDateTime.now());
+            issue.setResolvedBy(user);
+            issueRepository.save(issue);
+        }
+
         if (next == IssueStatus.CLOSED) {
             issue.setClosedAt(LocalDateTime.now());
             issue.setClosedBy(user.getId());
