@@ -44,7 +44,10 @@ public class IssueService {
         transitions.put(IssueStatus.IN_PROGRESS, Set.of(IssueStatus.RESOLVED, IssueStatus.ESCALATED));
         transitions.put(IssueStatus.ESCALATED, Set.of(IssueStatus.IN_PROGRESS, IssueStatus.RESOLVED));
         transitions.put(IssueStatus.RESOLVED, Set.of(IssueStatus.CLOSED));
+        transitions.put(IssueStatus.SLA_BREACHED, Set.of(IssueStatus.RESOLVED));
     }
+
+
 
     private void validateTransition(IssueStatus current, IssueStatus next) {
 
