@@ -13,6 +13,7 @@
 * [x] Spring Security Integration
 * [x] UserDetails Integration
 * [x] Role-Based Authorization
+* [x] Secure Issue Access Control
 
 ### User Management
 
@@ -28,6 +29,10 @@
 * [x] Priority Handling
 * [x] Issue History Tracking
 * [x] Issue Status Updates
+* [x] Get Single Issue API
+* [x] Get Escalated Issues API
+* [x] Issue Resolution Tracking (resolvedAt, resolvedBy)
+* [x] Issue Closure Tracking (closedAt, closedBy)
 
 ### Workflow Engine
 
@@ -37,6 +42,7 @@
 * [x] RESOLVED
 * [x] CLOSED
 * [x] SLA_BREACHED
+* [x] SLA_BREACHED → RESOLVED Recovery Flow
 
 ### Escalation System
 
@@ -61,6 +67,7 @@
 
 * [x] Create Official API
 * [x] View Officials API
+* [x] Update Official API
 * [x] Official Response DTO
 
 ### Admin APIs
@@ -71,6 +78,18 @@
 * [x] Update Department API
 * [x] Delete Department API
 
+### Dashboards
+
+* [x] Citizen Dashboard
+* [x] Official Dashboard
+* [x] Admin Dashboard
+
+### Analytics
+
+* [x] Issue Statistics
+* [x] Department Statistics
+* [x] Escalation Statistics
+
 ### JWT Refactor
 
 * [x] createIssue() uses JWT user
@@ -78,16 +97,6 @@
 * [x] getMyIssues() uses JWT user
 * [x] getAssignedIssues() uses JWT user
 * [x] getAllIssues() uses JWT user
-
----
-
-## 🔧 Pending Fixes
-
-* [x] Populate closedAt when issue closes
-* [x] Populate closedBy when issue closes
-* [x] Change CREATED history updatedBy from official → citizen
-* [x] Secure getIssueById()
-* [x] Null safety in getIssueWithEscalatedStatus()
 
 ---
 
@@ -112,6 +121,13 @@
 * [ ] Create custom exceptions
 * [ ] Standardize API error responses
 
+### Workflow Improvements
+
+* [ ] Introduce configurable SLA durations based on Priority
+* [ ] Replace hardcoded SLA_MINUTES with configuration
+* [ ] Add resolution remarks/comments
+* [ ] Add official resolution notes
+
 ### Architecture Improvements
 
 * [ ] Replace keyword-based department detection with department selection
@@ -124,32 +140,19 @@
 
 ## 🚀 Upcoming Features
 
-### Department Management
-
-* [x] Create Departments API
-* [x] Get All Departments API
-* [x] Update Department API
-* [x] Delete Department API
-
-### Dashboards
-
-* [x] Citizen Dashboard
-* [x] Official Dashboard
-* [X] Admin Dashboard
-
 ### Analytics
 
-* [x] Issue Statistics
-* [x] Department Statistics
-* [x] Escalation Statistics
 * [ ] SLA Statistics
 
 ### Administration
 
-* [x] Create Official API
-* [x] View Officials API
-* [x] Update Official API
 * [ ] Soft Delete / Deactivate Official
+
+### Workflow Enhancements
+
+* [ ] Citizen Reopen Issue API
+* [ ] Citizen Reject Resolution API
+* [ ] Resolution Verification Workflow
 
 ### Search & Pagination
 
@@ -186,3 +189,46 @@
 * [ ] Database Deployment
 * [ ] Frontend Deployment
 * [ ] Environment Variable Configuration
+* [ ] Dockerize Backend
+* [ ] Production MySQL Setup
+* [ ] CI/CD Pipeline
+
+---
+
+## 📊 Current Project Status
+
+### Backend Progress
+
+Authentication & Security: 100%
+
+User Management: 100%
+
+Issue Management: 95%
+
+Escalation System: 100%
+
+Department Management: 100%
+
+Official Management: 95%
+
+Dashboards: 100%
+
+Analytics: 90%
+
+Testing: 85%
+
+Frontend: 15%
+
+Deployment: 0%
+
+### Major Remaining Feature
+
+Citizen Resolution Verification Workflow
+
+RESOLVED → CLOSED
+
+or
+
+RESOLVED → REOPENED
+
+This is the largest remaining backend workflow gap before the system becomes production-ready.
