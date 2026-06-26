@@ -2,18 +2,46 @@
 
 ## 🚀 Overview
 
-CivicPulse is a workflow-driven backend system for citizen issue tracking and escalation.
-It is designed to ensure accountability by managing issue lifecycles, enforcing SLA rules, and enabling automatic escalation through hierarchical roles.
+CivicPulse is a workflow-driven backend application for managing and tracking civic issues. It enables citizens to report public grievances, automatically routes issues to the appropriate government department, and manages the complete resolution lifecycle through role-based workflows and SLA-driven escalation.
+
+The project focuses on transparency, accountability, and efficient issue resolution by combining automated assignment, hierarchical escalation, and detailed status tracking.
 
 ---
 
-## 🎯 Core Idea
+## 🎯 Core Features
 
-Citizens can raise issues which are:
+* Citizen issue registration
+* Automatic department detection based on issue description
+* Automatic official assignment
+* Role-Based Access Control (Citizen, Official, Admin)
+* JWT Authentication & Spring Security
+* Complete issue lifecycle management
+* Multi-level escalation workflow
+* SLA monitoring using scheduled tasks
+* Issue history tracking
+* Resolution and closure tracking
+* Dashboard statistics for different user roles
+* Department and official management
 
-* Automatically assigned to officials
-* Tracked through different lifecycle states
-* Escalated if not resolved within defined SLA
+---
+
+## 🔄 Issue Workflow
+
+```
+CREATED
+    ↓
+IN_PROGRESS
+    ↓
+ESCALATED
+    ↓
+SLA_BREACHED
+    ↓
+RESOLVED
+    ↓
+CLOSED
+```
+
+Every status change is stored in the Issue Status History, providing a complete audit trail of the issue lifecycle.
 
 ---
 
@@ -21,37 +49,64 @@ Citizens can raise issues which are:
 
 * Java
 * Spring Boot
-* MySQL (or Firestore - configurable)
+* Spring Security
+* JWT Authentication
+* MySQL
+* Spring Data JPA (Hibernate)
+* Maven
 * REST APIs
 
 ---
 
 ## 🧠 Key Concepts
 
-* Event-based status tracking (no direct status field in Issue)
-* Role-Based Access Control (CITIZEN, OFFICIAL, ADMIN)
-* Hierarchical escalation system
-* SLA-driven automation
+* Event-based issue status tracking
+* Role-Based Access Control (RBAC)
+* Hierarchical official escalation
+* SLA-based automated escalation
+* Department-wise issue routing
+* Resolution and closure tracking
+* Scheduler-driven background processing
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ Project Architecture
 
-* Controller Layer → Handles API requests
-* Service Layer → Business logic
-* Model Layer → Data structures
-* Repository Layer → Data access
-* Utility Layer → Authentication helpers
-* Exception Layer → Global error handling
+* Controller Layer – REST API endpoints
+* Service Layer – Business logic
+* Repository Layer – Database operations
+* Model Layer – Entity definitions
+* Security Layer – JWT Authentication & Authorization
+* Scheduler Layer – Automatic SLA monitoring and escalation
 
 ---
 
-## 📌 Project Status
+## 📌 Current Status
 
-🚧 In Development — Core backend system being built
+🚧 **Backend Under Active Development**
+
+### Completed
+
+* Authentication & Authorization
+* Citizen, Official & Admin modules
+* Department Management
+* Official Management
+* Issue Management
+* Automated Escalation Engine
+* Dashboard APIs
+* Issue Resolution & Closure Tracking
+
+### Planned
+
+* File upload support
+* Search & Pagination
+* Frontend (React)
+* Backend deployment
+* Production-ready validation and exception handling
 
 ---
 
 ## 👨‍💻 Author
 
-Sidhant Singh
+**Sidhant Singh**
+
