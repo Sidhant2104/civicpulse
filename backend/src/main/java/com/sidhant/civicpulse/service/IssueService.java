@@ -43,8 +43,9 @@ public class IssueService {
         transitions.put(IssueStatus.CREATED, Set.of(IssueStatus.IN_PROGRESS, IssueStatus.ESCALATED));
         transitions.put(IssueStatus.IN_PROGRESS, Set.of(IssueStatus.RESOLVED, IssueStatus.ESCALATED));
         transitions.put(IssueStatus.ESCALATED, Set.of(IssueStatus.IN_PROGRESS, IssueStatus.RESOLVED));
-        transitions.put(IssueStatus.RESOLVED, Set.of(IssueStatus.CLOSED));
+        transitions.put(IssueStatus.RESOLVED, Set.of(IssueStatus.CLOSED, IssueStatus.REOPENED));
         transitions.put(IssueStatus.SLA_BREACHED, Set.of(IssueStatus.RESOLVED));
+        transitions.put(IssueStatus.REOPENED, Set.of(IssueStatus.IN_PROGRESS));
     }
 
 
@@ -322,5 +323,39 @@ public class IssueService {
             }
         }
         return escalatedIssues;
+    }
+
+    // Review Issue
+    public UpdateIssueStatusResponseDto reviewIssue(
+            String issueId,
+            String email,
+            boolean approved) {
+
+        User user = userRepo.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (user.getRole() != Role.CITIZEN) {
+            throw new RuntimeException("Only citizens can review resolved issues");
+        }
+
+        Issue issue = issueRepository.findById(issueId)
+                .orElseThrow(() -> new RuntimeException("Issue not found"));
+
+        if (!issue.getCreatedBy().getId().equals(user.getId())) {
+            throw new RuntimeException("You can only review your own issues");
+        }
+
+        IssueStatusHistory latest =
+                issueStatusHistoryRepository.findTopByIssueOrderByUpdatedAtDesc(issue);
+
+        if (latest == null || latest.getStatus() != IssueStatus.RESOLVED) {
+            throw new RuntimeException("Only resolved issues can be reviewed");
+        }
+
+        IssueStatus nextStatus = approved
+                ? IssueStatus.CLOSED
+                : IssueStatus.REOPENED;
+
+        return updateIssueStatus(issueId, email, nextStatus);
     }
 }

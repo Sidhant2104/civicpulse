@@ -3,16 +3,13 @@ package com.sidhant.civicpulse.controller;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.sidhant.civicpulse.dto.*;
 import com.sidhant.civicpulse.model.Issue;
 import com.sidhant.civicpulse.model.IssueStatusHistory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import com.sidhant.civicpulse.dto.CreateIssueRequestDto;
-import com.sidhant.civicpulse.dto.IssueResponseDto;
-import com.sidhant.civicpulse.dto.UpdateIssueStatusRequestDto;
-import com.sidhant.civicpulse.dto.UpdateIssueStatusResponseDto;
 import com.sidhant.civicpulse.model.IssueStatus;
 import com.sidhant.civicpulse.model.User;
 import com.sidhant.civicpulse.repository.UserRepo;
@@ -131,5 +128,20 @@ public class IssueController {
                 issueService.getIssueWithEscalatedStatus();
 
         return escalatedIssues;
+    }
+
+
+    //Review Issues
+    @PatchMapping("/issue/{issueId}/review")
+    public UpdateIssueStatusResponseDto reviewIssue(
+            @PathVariable String issueId,
+            @RequestBody ReviewIssueRequestDto dto) {
+
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        String email = authentication.getName();
+
+        return issueService.reviewIssue(issueId, email, dto.isApproved());
     }
 }

@@ -6,5 +6,6 @@ public enum IssueStatus {
     RESOLVED,
     ESCALATED,
     CLOSED,
+    REOPENED,
     SLA_BREACHED
 }
