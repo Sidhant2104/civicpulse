@@ -27,6 +27,7 @@ public class User implements UserDetails {
     private String departmentId;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @Enumerated(EnumType.STRING)
     private Level level;
     private LocalDateTime createdAt;
 

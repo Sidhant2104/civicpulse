@@ -1,8 +1,6 @@
 package com.sidhant.civicpulse.controller;
 
 import com.sidhant.civicpulse.dto.*;
-import com.sidhant.civicpulse.model.User;
-import com.sidhant.civicpulse.service.AuthService;
 import com.sidhant.civicpulse.service.OfficialService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

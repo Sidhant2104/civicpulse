@@ -11,7 +11,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import com.sidhant.civicpulse.model.IssueStatus;
-import com.sidhant.civicpulse.model.User;
 import com.sidhant.civicpulse.repository.UserRepo;
 import com.sidhant.civicpulse.service.IssueService;
 

@@ -17,6 +17,7 @@ public class IssueStatusHistory {
     @ManyToOne
     private Issue issue;
 
+    @Enumerated(EnumType.STRING)
     private IssueStatus status;
 
     @ManyToOne

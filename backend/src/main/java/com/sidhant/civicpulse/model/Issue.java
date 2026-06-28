@@ -2,9 +2,7 @@ package com.sidhant.civicpulse.model;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,6 +17,7 @@ public class Issue {
     @ManyToOne
     private Department department;
 
+    @Enumerated(EnumType.STRING)
     private Priority priority;
 
     @ManyToOne
