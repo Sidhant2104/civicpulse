@@ -69,13 +69,15 @@ public class IssueService {
             if (!issue.getAssignedTo().getId().equals(user.getId())) {
                 throw new RuntimeException("Official not assigned to this issue");
             }
+            return;
         }
 
-        else if (user.getRole() == Role.CITIZEN) {
+        if (user.getRole() == Role.CITIZEN) {
             if (!issue.getCreatedBy().getId().equals(user.getId())
-                    || next != IssueStatus.CLOSED) {
+                    || (next != IssueStatus.CLOSED && next != IssueStatus.REOPENED)) {
                 throw new RuntimeException("Citizen not allowed");
             }
+            return;
         }
     }
 
@@ -199,6 +201,14 @@ public class IssueService {
 
             issue.setResolvedAt(LocalDateTime.now());
             issue.setResolvedBy(user);
+            issueRepository.save(issue);
+        }
+
+        if (next == IssueStatus.REOPENED) {
+
+            issue.setResolvedAt(null);
+            issue.setResolvedBy(null);
+
             issueRepository.save(issue);
         }
 
