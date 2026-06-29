@@ -41,8 +41,13 @@
 * [x] ESCALATED
 * [x] RESOLVED
 * [x] CLOSED
+* [x] REOPENED
 * [x] SLA_BREACHED
 * [x] SLA_BREACHED → RESOLVED Recovery Flow
+* [x] Citizen Resolution Verification Workflow
+* [x] RESOLVED → REOPENED
+* [x] REOPENED → IN_PROGRESS
+* [x] RESOLVED → CLOSED
 
 ### Escalation System
 
@@ -57,6 +62,7 @@
 * [x] Create Issue
 * [x] Get My Issues
 * [x] Get Issue History
+* [x] Review Issue API (Approve / Reject Resolution)
 
 ### Official APIs
 
@@ -97,6 +103,13 @@
 * [x] getMyIssues() uses JWT user
 * [x] getAssignedIssues() uses JWT user
 * [x] getAllIssues() uses JWT user
+
+### Enum Migration
+
+* [x] IssueStatus → EnumType.STRING
+* [x] Priority → EnumType.STRING
+* [x] Level → EnumType.STRING
+* [x] Role → EnumType.STRING
 
 ---
 
@@ -148,12 +161,6 @@
 
 * [ ] Soft Delete / Deactivate Official
 
-### Workflow Enhancements
-
-* [ ] Citizen Reopen Issue API
-* [ ] Citizen Reject Resolution API
-* [ ] Resolution Verification Workflow
-
 ### Search & Pagination
 
 * [ ] Search Issues API
@@ -181,6 +188,7 @@
 * [x] Citizen Dashboard Testing
 * [x] Official Dashboard Testing
 * [x] Department API Testing
+* [x] Citizen Review Workflow Testing
 * [ ] End-to-End Dashboard Testing
 
 ### Deployment
@@ -199,36 +207,34 @@
 
 ### Backend Progress
 
-Authentication & Security: 100%
+Authentication & Security: **100%**
 
-User Management: 100%
+User Management: **100%**
 
-Issue Management: 95%
+Issue Management: **100%**
 
-Escalation System: 100%
+Escalation System: **100%**
 
-Department Management: 100%
+Department Management: **100%**
 
-Official Management: 95%
+Official Management: **95%**
 
-Dashboards: 100%
+Dashboards: **100%**
 
-Analytics: 90%
+Analytics: **90%**
 
-Testing: 85%
+Testing: **90%**
 
-Frontend: 15%
+Frontend: **15%**
 
-Deployment: 0%
+Deployment: **0%**
 
-### Major Remaining Feature
+### Major Remaining Backend Features
 
-Citizen Resolution Verification Workflow
-
-RESOLVED → CLOSED
-
-or
-
-RESOLVED → REOPENED
-
-This is the largest remaining backend workflow gap before the system becomes production-ready.
+* Bean Validation
+* Global Exception Handling
+* Custom Exceptions
+* Search API
+* Pagination
+* File Uploads
+* Official Deactivation
