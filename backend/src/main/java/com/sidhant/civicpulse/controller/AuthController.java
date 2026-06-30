@@ -5,6 +5,7 @@ import com.sidhant.civicpulse.dto.LoginResponseDto;
 import com.sidhant.civicpulse.dto.SignupRequestDto;
 import com.sidhant.civicpulse.dto.SignupResponseDto;
 import com.sidhant.civicpulse.service.AuthService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,13 +21,13 @@ public class AuthController {
 
     //1: SIGNUP
     @PostMapping("/signup")
-    public SignupResponseDto registerUser(@RequestBody SignupRequestDto request){
+    public SignupResponseDto registerUser(@Valid @RequestBody SignupRequestDto request){
         return authService.registerUser(request);
     }
 
 //    //2: LOGIN
     @PostMapping("/login")
-    public LoginResponseDto LoginUser(@RequestBody LoginRequestDto request){
+    public LoginResponseDto LoginUser(@Valid @RequestBody LoginRequestDto request){
         return authService.LoginUser(request);
     }
 

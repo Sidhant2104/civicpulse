@@ -6,6 +6,7 @@ import java.util.List;
 import com.sidhant.civicpulse.dto.*;
 import com.sidhant.civicpulse.model.Issue;
 import com.sidhant.civicpulse.model.IssueStatusHistory;
+import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,7 @@ public class IssueController {
     // 1: Create Issue
     @PostMapping("/issue")
     public IssueResponseDto createIssue(
-            @RequestBody CreateIssueRequestDto dto) {
+            @Valid @RequestBody CreateIssueRequestDto dto) {
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
 
@@ -134,7 +135,7 @@ public class IssueController {
     @PatchMapping("/issue/{issueId}/review")
     public UpdateIssueStatusResponseDto reviewIssue(
             @PathVariable String issueId,
-            @RequestBody ReviewIssueRequestDto dto) {
+            @Valid @RequestBody ReviewIssueRequestDto dto) {
 
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
