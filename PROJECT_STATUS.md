@@ -231,7 +231,7 @@ Deployment: **0%**
 
 ### Major Remaining Backend Features
 
-* Bean Validation
+* Bean Validation: **100%**
 * Global Exception Handling
 * Custom Exceptions
 * Search API
