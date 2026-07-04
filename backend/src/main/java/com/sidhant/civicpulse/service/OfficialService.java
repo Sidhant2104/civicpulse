@@ -4,6 +4,9 @@ import com.sidhant.civicpulse.dto.CreateOfficialRequestDto;
 import com.sidhant.civicpulse.dto.CreateOfficialResponseDto;
 import com.sidhant.civicpulse.dto.GetOfficialResponseDto;
 import com.sidhant.civicpulse.dto.UpdateOfficialRequestDto;
+import com.sidhant.civicpulse.exception.ConflictException;
+import com.sidhant.civicpulse.exception.ForbiddenException;
+import com.sidhant.civicpulse.exception.NotFoundException;
 import com.sidhant.civicpulse.model.Department;
 import com.sidhant.civicpulse.model.Role;
 import com.sidhant.civicpulse.model.User;
@@ -35,10 +38,10 @@ public class OfficialService {
     // 1: Create Official
     public CreateOfficialResponseDto createOfficial(CreateOfficialRequestDto request, String adminEmail){
         User admin = userRepo.findByEmail(adminEmail)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
         if(admin.getRole() != Role.ADMIN){
-            throw new RuntimeException(
+            throw new ForbiddenException(
                     "Only admins can create officials"
             );
         }
@@ -47,7 +50,7 @@ public class OfficialService {
                 userRepo.findByEmail(request.getEmail());
 
         if(existingUser.isPresent()){
-            throw new RuntimeException(
+            throw new ConflictException(
                     "User already exists"
             );
         }
@@ -55,7 +58,7 @@ public class OfficialService {
                 departmentRepository.findById(
                         request.getDepartmentId()
                 ).orElseThrow(() ->
-                        new RuntimeException("Department not found"));
+                        new NotFoundException("Department not found"));
         String encodedPassword =
                 passwordEncoder.encode(
                         request.getPassword()
@@ -110,14 +113,14 @@ public class OfficialService {
 
     //3: Update Official
     public CreateOfficialResponseDto updateOfficial(String officialId, UpdateOfficialRequestDto dto){
-        User official =  userRepo.findById(officialId).orElseThrow(()->new RuntimeException("Official not found"));
+        User official =  userRepo.findById(officialId).orElseThrow(()->new NotFoundException("Official not found"));
 
         official.setName(dto.getName());
         official.setPhoneNo(dto.getPhoneNo());
         official.setLevel(dto.getLevel());
 
         Department department = departmentRepository.findById(dto.getDepartmentId()).orElseThrow(() ->
-                        new RuntimeException("Department not found"));
+                        new NotFoundException("Department not found"));
 
         official.setDepartmentId(dto.getDepartmentId());
 

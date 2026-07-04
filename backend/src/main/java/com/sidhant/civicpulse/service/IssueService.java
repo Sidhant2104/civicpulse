@@ -3,6 +3,10 @@ package com.sidhant.civicpulse.service;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import com.sidhant.civicpulse.exception.BadRequestException;
+import com.sidhant.civicpulse.exception.ForbiddenException;
+import com.sidhant.civicpulse.exception.NotFoundException;
+import com.sidhant.civicpulse.exception.ResourceUnavailableException;
 import org.springframework.stereotype.Service;
 
 import com.sidhant.civicpulse.dto.CreateIssueRequestDto;
@@ -55,7 +59,7 @@ public class IssueService {
         Set<IssueStatus> allowed = transitions.get(current);
 
         if (allowed == null || !allowed.contains(next)) {
-            throw new RuntimeException("Invalid status transition");
+            throw new BadRequestException("Invalid status transition");
         }
     }
 
@@ -67,7 +71,7 @@ public class IssueService {
 
         if (user.getRole() == Role.OFFICIAL) {
             if (!issue.getAssignedTo().getId().equals(user.getId())) {
-                throw new RuntimeException("Official not assigned to this issue");
+                throw new ForbiddenException("Official not assigned to this issue");
             }
             return;
         }
@@ -75,7 +79,7 @@ public class IssueService {
         if (user.getRole() == Role.CITIZEN) {
             if (!issue.getCreatedBy().getId().equals(user.getId())
                     || (next != IssueStatus.CLOSED && next != IssueStatus.REOPENED)) {
-                throw new RuntimeException("Citizen not allowed");
+                throw new ForbiddenException("Citizen not allowed");
             }
             return;
         }
@@ -87,10 +91,10 @@ public class IssueService {
 
         // VALIDATION
         User citizen = userRepo.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
         if (citizen.getRole() != Role.CITIZEN) {
-            throw new RuntimeException("Only citizens can create issues");
+            throw new ForbiddenException("Only citizens can create issues");
         }
 
         String description = dto.getDescription();
@@ -133,12 +137,12 @@ public class IssueService {
 
         Department departmentObj = departmentRepository.findByName(department);
         if (departmentObj == null) {
-            throw new RuntimeException("Department not found");
+            throw new NotFoundException("Department not found");
         }
 
         User official = userRepo.findTopByDepartmentIdAndRoleOrderByLevelAsc(departmentObj.getId(), Role.OFFICIAL);
         if (official == null) {
-            throw new RuntimeException("No official available for this  department");
+            throw new ResourceUnavailableException("No official available for this  department");
         }
 
         Issue issue = new Issue();
@@ -175,9 +179,9 @@ public class IssueService {
     // Issue Status Update System
     public UpdateIssueStatusResponseDto updateIssueStatus(String issueId, String email, IssueStatus next) {
         User user = userRepo.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
-        Issue issue = issueRepository.findById(issueId).orElseThrow(() -> new RuntimeException("Issue not found"));
+        Issue issue = issueRepository.findById(issueId).orElseThrow(() -> new NotFoundException("Issue not found"));
         IssueStatusHistory latest = issueStatusHistoryRepository.findTopByIssueOrderByUpdatedAtDesc(issue);
         IssueStatus currentStatus;
         if (latest == null) {
@@ -233,7 +237,7 @@ public class IssueService {
 
     // Get Issue History by IssueID
     public List<IssueStatusHistory> getIssueHistory(String issueId){
-        Issue issue = issueRepository.findById(issueId).orElseThrow(()->new RuntimeException("Issue Not Found"));
+        Issue issue = issueRepository.findById(issueId).orElseThrow(()->new NotFoundException("Issue not found"));
         List<IssueStatusHistory> issueHistory =
                 issueStatusHistoryRepository.findByIssue(issue);
         return issueHistory;
@@ -242,11 +246,11 @@ public class IssueService {
     // Get all issues created by currently logged-in citizen
     public List<Issue> getMyIssues(String email){
         User user = userRepo.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
         // Validate that only citizens can access this API
         if(user.getRole() != Role.CITIZEN){
-            throw new RuntimeException(
+            throw new ForbiddenException(
                     "Only citizens can access their issues"
             );
         }
@@ -262,10 +266,10 @@ public class IssueService {
     public List<Issue> getAssignedIssues(String email){
 
         User user = userRepo.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
         if(user.getRole() != Role.OFFICIAL){
-            throw new RuntimeException(
+            throw new ForbiddenException(
                     "Only officials can access issues assigned to them"
             );
         }
@@ -279,10 +283,10 @@ public class IssueService {
     public List<Issue> getAllIssues(String email){
 
         User user = userRepo.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
         if(user.getRole() != Role.ADMIN){
-            throw new RuntimeException(
+            throw new ForbiddenException(
                     "Only admins can access all issues"
             );
         }
@@ -294,28 +298,28 @@ public class IssueService {
     public Issue getIssueById(String issueId, String email){
 
         User user = userRepo.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
         Issue issue = issueRepository.findById(issueId).orElseThrow(() ->
-                        new RuntimeException("Issue not found"));
+                        new NotFoundException("Issue not found"));
         if (user.getRole() == Role.ADMIN) {
             return issue;
         }
 
         if (user.getRole() == Role.OFFICIAL) {
             if (!issue.getAssignedTo().getId().equals(user.getId())) {
-                throw new RuntimeException("Access denied");
+                throw new ForbiddenException("Access denied");
             }
             return issue;
         }
 
         if (user.getRole() == Role.CITIZEN) {
             if (!issue.getCreatedBy().getId().equals(user.getId())) {
-                throw new RuntimeException("Access denied");
+                throw new ForbiddenException("Access denied");
             }
             return issue;
         }
-        throw new RuntimeException("Access denied");
+        throw new ForbiddenException("Access denied");
 
     }
 
@@ -342,24 +346,24 @@ public class IssueService {
             boolean approved) {
 
         User user = userRepo.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
         if (user.getRole() != Role.CITIZEN) {
-            throw new RuntimeException("Only citizens can review resolved issues");
+            throw new ForbiddenException("Only citizens can review resolved issues");
         }
 
         Issue issue = issueRepository.findById(issueId)
-                .orElseThrow(() -> new RuntimeException("Issue not found"));
+                .orElseThrow(() -> new NotFoundException("Issue not found"));
 
         if (!issue.getCreatedBy().getId().equals(user.getId())) {
-            throw new RuntimeException("You can only review your own issues");
+            throw new ForbiddenException("You can only review your own issues");
         }
 
         IssueStatusHistory latest =
                 issueStatusHistoryRepository.findTopByIssueOrderByUpdatedAtDesc(issue);
 
         if (latest == null || latest.getStatus() != IssueStatus.RESOLVED) {
-            throw new RuntimeException("Only resolved issues can be reviewed");
+            throw new ForbiddenException("Only resolved issues can be reviewed");
         }
 
         IssueStatus nextStatus = approved

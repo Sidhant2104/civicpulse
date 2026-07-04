@@ -1,6 +1,8 @@
 package com.sidhant.civicpulse.service;
 
 import com.sidhant.civicpulse.dto.*;
+import com.sidhant.civicpulse.exception.ForbiddenException;
+import com.sidhant.civicpulse.exception.NotFoundException;
 import com.sidhant.civicpulse.model.*;
 import com.sidhant.civicpulse.repository.DepartmentRepository;
 import com.sidhant.civicpulse.repository.IssueRepository;
@@ -29,10 +31,10 @@ public class DashboardService {
 
     // 1: Citizen Dashboard
     public CitizenDashboardResponseDto getCitizenDashboard(String email){
-        User user = userRepo.findByEmail(email).orElseThrow(()-> new RuntimeException("User not found"));
+        User user = userRepo.findByEmail(email).orElseThrow(()-> new NotFoundException("User not found"));
 
         if(user.getRole() != Role.CITIZEN){
-            throw new RuntimeException("Only citizens can access citizen dashboard");
+            throw new ForbiddenException("Only citizens can access citizen dashboard");
         }
         List<Issue> issues = issueRepository.findByCreatedBy(user);
 
@@ -96,10 +98,10 @@ public class DashboardService {
 
     // 2: Official Dashboard
     public OfficialDashboardResponseDto getOfficialDashboard(String email){
-        User user = userRepo.findByEmail(email).orElseThrow(()-> new RuntimeException("User not found"));
+        User user = userRepo.findByEmail(email).orElseThrow(()-> new NotFoundException("User not found"));
 
         if(user.getRole() != Role.OFFICIAL){
-            throw new RuntimeException("Only officials can access Official Dashboard");
+            throw new ForbiddenException("Only officials can access Official Dashboard");
         }
 
         List<Issue> issues = issueRepository.findByAssignedTo(user);
@@ -149,7 +151,7 @@ public class DashboardService {
 
     //3: Admin Dashboard
     public AdminDashboardResponseDto getAdminDashboard(String email){
-        User user = userRepo.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepo.findByEmail(email).orElseThrow(() -> new NotFoundException("User not found"));
 
         List<Issue> issues = issueRepository.findAll();
         int totalIssues = issues.size();

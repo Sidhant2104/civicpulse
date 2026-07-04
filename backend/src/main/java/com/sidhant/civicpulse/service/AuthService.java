@@ -1,12 +1,12 @@
 package com.sidhant.civicpulse.service;
 
 import com.sidhant.civicpulse.dto.*;
-import com.sidhant.civicpulse.model.Department;
+import com.sidhant.civicpulse.exception.ConflictException;
 import com.sidhant.civicpulse.model.Role;
 import com.sidhant.civicpulse.model.User;
-import com.sidhant.civicpulse.repository.DepartmentRepository;
 import com.sidhant.civicpulse.repository.UserRepo;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ public class AuthService {
     public SignupResponseDto registerUser(SignupRequestDto request){
     Optional<User> userEmail =  userRepo.findByEmail((request.getEmail()));
     if(userEmail.isPresent()){
-        throw new RuntimeException("User already exists");
+        throw new ConflictException("User already exists");
     }
 
     String pass = request.getPassword();
@@ -67,7 +67,7 @@ public class AuthService {
                 ));
 
         User user = userRepo.findByEmail(request.getEmail())
-                .orElseThrow(()-> new RuntimeException("Invalid email or password")); // just to be safe from  attackers
+                .orElseThrow(()-> new BadCredentialsException("Invalid email or password")); // just to be safe from  attackers
         // who can enumerate email
 
         String token = jwtService.generateToken(user);
@@ -82,7 +82,4 @@ public class AuthService {
 
         return response;
     }
-
-
-
 }
