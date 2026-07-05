@@ -14,12 +14,34 @@
 * [x] UserDetails Integration
 * [x] Role-Based Authorization
 * [x] Secure Issue Access Control
+* [x] BadCredentialsException Handling (401)
+
+---
+
+### Validation & Error Handling
+
+* [x] Bean Validation (@NotBlank, @Email, @Size)
+* [x] @Valid on Controller Endpoints
+* [x] Global Exception Handler (@RestControllerAdvice)
+* [x] Custom Exceptions
+    * [x] NotFoundException
+    * [x] ForbiddenException
+    * [x] ConflictException
+    * [x] BadRequestException
+    * [x] ResourceUnavailableException
+* [x] Standard HTTP Error Responses
+* [x] Authentication Exception Handling (401)
+* [x] Business RuntimeException Migration
+
+---
 
 ### User Management
 
 * [x] Citizen Registration
 * [x] Department Hierarchy
 * [x] Level Hierarchy (LEVEL_1 → LEVEL_4)
+
+---
 
 ### Issue Management
 
@@ -33,6 +55,8 @@
 * [x] Get Escalated Issues API
 * [x] Issue Resolution Tracking (resolvedAt, resolvedBy)
 * [x] Issue Closure Tracking (closedAt, closedBy)
+
+---
 
 ### Workflow Engine
 
@@ -49,6 +73,8 @@
 * [x] REOPENED → IN_PROGRESS
 * [x] RESOLVED → CLOSED
 
+---
+
 ### Escalation System
 
 * [x] Scheduled Escalation Service
@@ -57,6 +83,8 @@
 * [x] Automatic Reassignment
 * [x] SLA Breach Detection
 
+---
+
 ### Citizen APIs
 
 * [x] Create Issue
@@ -64,10 +92,14 @@
 * [x] Get Issue History
 * [x] Review Issue API (Approve / Reject Resolution)
 
+---
+
 ### Official APIs
 
 * [x] Get Assigned Issues
 * [x] Update Issue Status
+
+---
 
 ### Official Management
 
@@ -75,6 +107,8 @@
 * [x] View Officials API
 * [x] Update Official API
 * [x] Official Response DTO
+
+---
 
 ### Admin APIs
 
@@ -84,17 +118,23 @@
 * [x] Update Department API
 * [x] Delete Department API
 
+---
+
 ### Dashboards
 
 * [x] Citizen Dashboard
 * [x] Official Dashboard
 * [x] Admin Dashboard
 
+---
+
 ### Analytics
 
 * [x] Issue Statistics
 * [x] Department Statistics
 * [x] Escalation Statistics
+
+---
 
 ### JWT Refactor
 
@@ -103,6 +143,8 @@
 * [x] getMyIssues() uses JWT user
 * [x] getAssignedIssues() uses JWT user
 * [x] getAllIssues() uses JWT user
+
+---
 
 ### Enum Migration
 
@@ -113,7 +155,7 @@
 
 ---
 
-## 🧹 Technical Debt / Cleanup Later
+# 🧹 Technical Debt / Cleanup Later
 
 ### Department System
 
@@ -121,120 +163,161 @@
 * [ ] Standardize all Department IDs to UUIDs
 * [ ] Recreate officials using UUID-based department IDs
 
+---
+
 ### Official Data Cleanup
 
 * [ ] Remove legacy officials with null email/phone fields
 * [ ] Recreate officials through Create Official API
 
-### Validation & Error Handling
-
-* [ ] Add Bean Validation (@NotBlank, @Email, @Size)
-* [ ] Add @Valid to controller endpoints
-* [ ] Add Global Exception Handler (@RestControllerAdvice)
-* [ ] Create custom exceptions
-* [ ] Standardize API error responses
+---
 
 ### Workflow Improvements
 
-* [ ] Introduce configurable SLA durations based on Priority
+* [ ] Configurable SLA duration based on Priority
 * [ ] Replace hardcoded SLA_MINUTES with configuration
-* [ ] Add resolution remarks/comments
-* [ ] Add official resolution notes
-
-### Architecture Improvements
-
-* [ ] Replace keyword-based department detection with department selection
-* [ ] Introduce standard API response wrapper
-* [ ] Add isActive flag to User entity
-* [ ] Implement Official Deactivation API
-* [ ] Exclude inactive officials from assignment logic
+* [ ] Resolution Remarks
+* [ ] Official Resolution Notes
 
 ---
 
-## 🚀 Upcoming Features
+### Architecture Improvements
 
-### Analytics
+* [ ] Standard API Response Wrapper
+* [ ] Department Selection instead of Keyword Detection
+* [ ] User isActive flag
+* [ ] Official Deactivation API
+* [ ] Ignore inactive officials during assignment
 
-* [ ] SLA Statistics
+---
 
-### Administration
+# 🚀 Upcoming Features
 
-* [ ] Soft Delete / Deactivate Official
-
-### Search & Pagination
+## Search & Pagination
 
 * [ ] Search Issues API
-* [ ] Pagination for Issues
+* [ ] Pagination
+* [ ] Sorting
 
-### File Uploads
+---
 
-* [ ] Upload Issue Evidence
-* [ ] Attach Images to Issues
+## Analytics
 
-### Frontend
+* [ ] SLA Statistics
+* [ ] Average Resolution Time
+* [ ] Department Performance Metrics
+
+---
+
+## Administration
+
+* [ ] Soft Delete Official
+* [ ] Restore Official
+
+---
+
+## File Uploads
+
+* [ ] Upload Issue Images
+* [ ] Multiple Attachments
+* [ ] Image Retrieval API
+
+---
+
+## Frontend
 
 * [ ] React Setup
-* [ ] Login Page
+* [ ] Authentication
 * [ ] Citizen Dashboard
-* [ ] Issue Creation Page
-* [ ] My Issues Page
+* [ ] Issue Creation
+* [ ] My Issues
 * [ ] Official Dashboard
 * [ ] Admin Dashboard
-* [ ] Manage Officials
-* [ ] Manage Departments
+* [ ] Department Management
+* [ ] Official Management
 
-### Testing
+---
 
-* [x] Citizen Dashboard Testing
-* [x] Official Dashboard Testing
+## Testing
+
+* [x] Authentication Testing
+* [x] Dashboard Testing
 * [x] Department API Testing
+* [x] Official API Testing
 * [x] Citizen Review Workflow Testing
-* [ ] End-to-End Dashboard Testing
+* [x] Exception Handling Testing
+* [ ] End-to-End Integration Testing
 
-### Deployment
+---
+
+## Deployment
 
 * [ ] Backend Deployment
 * [ ] Database Deployment
 * [ ] Frontend Deployment
-* [ ] Environment Variable Configuration
-* [ ] Dockerize Backend
-* [ ] Production MySQL Setup
+* [ ] Environment Variables
+* [ ] Docker
+* [ ] Production MySQL
 * [ ] CI/CD Pipeline
 
 ---
 
-## 📊 Current Project Status
+# 📊 Current Project Status
 
-### Backend Progress
+## Backend Progress
 
-Authentication & Security: **100%**
+Authentication & Security **100%**
 
-User Management: **100%**
+Validation & Exception Handling **100%**
 
-Issue Management: **100%**
+User Management **100%**
 
-Escalation System: **100%**
+Issue Management **100%**
 
-Department Management: **100%**
+Workflow Engine **100%**
 
-Official Management: **95%**
+Escalation System **100%**
 
-Dashboards: **100%**
+Department Management **100%**
 
-Analytics: **90%**
+Official Management **95%**
 
-Testing: **90%**
+Dashboards **100%**
 
-Frontend: **15%**
+Analytics **90%**
 
-Deployment: **0%**
+Testing **95%**
 
-### Major Remaining Backend Features
+Frontend **15%**
 
-* Bean Validation: **100%**
-* Global Exception Handling
-* Custom Exceptions
+Deployment **0%**
+
+---
+
+# 🎯 Major Remaining Backend Features
+
 * Search API
 * Pagination
 * File Uploads
 * Official Deactivation
+* Configurable SLA
+* Standard API Response Wrapper
+* Production Data Cleanup
+
+---
+
+## Overall Project Progress
+
+### Backend: **97–98% Complete** ✅
+
+The backend now has:
+- Authentication & JWT
+- Validation
+- Exception Handling
+- Complete Workflow Engine
+- Escalation System
+- Dashboards
+- Analytics
+- Tested REST APIs
+
+The remaining work is primarily enhancement features and production-readiness rather than core functionality.

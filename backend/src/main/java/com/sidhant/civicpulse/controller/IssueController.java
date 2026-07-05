@@ -7,6 +7,8 @@ import com.sidhant.civicpulse.dto.*;
 import com.sidhant.civicpulse.model.Issue;
 import com.sidhant.civicpulse.model.IssueStatusHistory;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -72,38 +74,35 @@ public class IssueController {
 
     // 4. Get all issues of currently logged-in citizen
     @GetMapping("/issue/my")
-    public List<Issue> getMyIssues(){
-
+    public Page<Issue> getMyIssues(Pageable pageable){
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
-
         String email = authentication.getName();
-
-        return issueService.getMyIssues(email);
+        return issueService.getMyIssues(email, pageable);
     }
 
     // 5. Get all issues assigned to the current official
     @GetMapping("/issue/assigned")
-    public List<Issue> getAssignedIssues() {
+    public Page<Issue> getAssignedIssues(Pageable pageable) {
 
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
 
         String email = authentication.getName();
 
-        return issueService.getAssignedIssues(email);
+        return issueService.getAssignedIssues(email, pageable);
     }
 
     // 6. Get all issues in the system
     @GetMapping("/issue/all")
-    public List<Issue> getAllIssues() {
+    public Page<Issue> getAllIssues(Pageable pageable) {
 
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
 
         String email = authentication.getName();
 
-        return issueService.getAllIssues(email);
+        return issueService.getAllIssues(email, pageable);
     }
 
 

@@ -7,6 +7,8 @@ import com.sidhant.civicpulse.exception.BadRequestException;
 import com.sidhant.civicpulse.exception.ForbiddenException;
 import com.sidhant.civicpulse.exception.NotFoundException;
 import com.sidhant.civicpulse.exception.ResourceUnavailableException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.sidhant.civicpulse.dto.CreateIssueRequestDto;
@@ -244,43 +246,39 @@ public class IssueService {
     }
 
     // Get all issues created by currently logged-in citizen
-    public List<Issue> getMyIssues(String email){
+    public Page<Issue> getMyIssues(String email, Pageable pageable){
+        validatePageable(pageable);
         User user = userRepo.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User not found"));
-
         // Validate that only citizens can access this API
         if(user.getRole() != Role.CITIZEN){
             throw new ForbiddenException(
                     "Only citizens can access their issues"
             );
         }
-
         // Fetch all issues created by this citizen
-        List<Issue> issues = issueRepository.findByCreatedBy(user);
-
+        Page<Issue> issues = issueRepository.findByCreatedBy(user, pageable);
         // Return citizen's issues
         return issues;
     }
 
     // Get all issues assigned to the current official
-    public List<Issue> getAssignedIssues(String email){
-
+    public Page<Issue> getAssignedIssues(String email, Pageable pageable){
+        validatePageable(pageable);
         User user = userRepo.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User not found"));
-
         if(user.getRole() != Role.OFFICIAL){
-            throw new ForbiddenException(
-                    "Only officials can access issues assigned to them"
-            );
+            throw new ForbiddenException("Only officials can access issues assigned to them");
         }
-
-        List<Issue> issues = issueRepository.findByAssignedTo(user);
+        Page<Issue> issues = issueRepository.findByAssignedTo(user,pageable);
 
         return issues;
     }
 
     // Get all issues in the system for admin
-    public List<Issue> getAllIssues(String email){
+    public Page<Issue> getAllIssues(String email, Pageable pageable){
+
+        validatePageable(pageable);
 
         User user = userRepo.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User not found"));
@@ -291,7 +289,7 @@ public class IssueService {
             );
         }
 
-        return issueRepository.findAll();
+        return issueRepository.findAll(pageable);
     }
 
     // Get single issue details by issueId
@@ -371,5 +369,14 @@ public class IssueService {
                 : IssueStatus.REOPENED;
 
         return updateIssueStatus(issueId, email, nextStatus);
+    }
+
+
+    private void validatePageable(Pageable pageable) {
+
+        if (pageable.getPageSize() > 50) {
+            throw new BadRequestException("Page size cannot exceed 50.");
+        }
+
     }
 }
