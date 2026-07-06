@@ -9,6 +9,8 @@ import com.sidhant.civicpulse.model.IssueStatusHistory;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -74,7 +76,8 @@ public class IssueController {
 
     // 4. Get all issues of currently logged-in citizen
     @GetMapping("/issue/my")
-    public Page<Issue> getMyIssues(Pageable pageable){
+    public Page<Issue> getMyIssues(@PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC
+    )Pageable pageable){
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
@@ -83,7 +86,7 @@ public class IssueController {
 
     // 5. Get all issues assigned to the current official
     @GetMapping("/issue/assigned")
-    public Page<Issue> getAssignedIssues(Pageable pageable) {
+    public Page<Issue> getAssignedIssues(@PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC)Pageable pageable) {
 
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
@@ -95,7 +98,8 @@ public class IssueController {
 
     // 6. Get all issues in the system
     @GetMapping("/issue/all")
-    public Page<Issue> getAllIssues(Pageable pageable) {
+    public Page<Issue> getAllIssues(@PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC
+    )Pageable pageable) {
 
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
