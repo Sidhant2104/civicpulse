@@ -196,8 +196,8 @@
 ## Search & Pagination
 
 * [ ] Search Issues API
-* [ ] Pagination
-* [ ] Sorting
+* [x] Pagination
+* [x] Sorting
 
 ---
 

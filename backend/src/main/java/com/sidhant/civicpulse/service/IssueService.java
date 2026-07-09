@@ -7,8 +7,10 @@ import com.sidhant.civicpulse.exception.BadRequestException;
 import com.sidhant.civicpulse.exception.ForbiddenException;
 import com.sidhant.civicpulse.exception.NotFoundException;
 import com.sidhant.civicpulse.exception.ResourceUnavailableException;
+import com.sidhant.civicpulse.specification.IssueSpecification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.sidhant.civicpulse.dto.CreateIssueRequestDto;
@@ -276,20 +278,42 @@ public class IssueService {
     }
 
     // Get all issues in the system for admin
-    public Page<Issue> getAllIssues(String email, Pageable pageable){
+    public Page<Issue> getAllIssues(
+            String email,
+            String search,
+            IssueStatus status,
+            Priority priority,
+            String department,
+            Pageable pageable) {
 
         validatePageable(pageable);
 
         User user = userRepo.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
-        if(user.getRole() != Role.ADMIN){
+        if (user.getRole() != Role.ADMIN) {
             throw new ForbiddenException(
                     "Only admins can access all issues"
             );
         }
 
-        return issueRepository.findAll(pageable);
+        Specification<Issue> spec = Specification.where(null);
+
+        if (status != null) {
+            spec = spec.and(IssueSpecification.hasStatus(status));
+        }
+
+        if (priority != null) {
+            spec = spec.and(IssueSpecification.hasPriority(priority));
+        }
+
+        if (search != null && !search.isBlank()) {
+            spec = spec.and(IssueSpecification.descriptionContains(search));
+        }
+
+        // Department filter will be added next
+
+        return issueRepository.findAll(spec, pageable);
     }
 
     // Get single issue details by issueId

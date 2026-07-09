@@ -6,6 +6,7 @@ import java.util.List;
 import com.sidhant.civicpulse.dto.*;
 import com.sidhant.civicpulse.model.Issue;
 import com.sidhant.civicpulse.model.IssueStatusHistory;
+import com.sidhant.civicpulse.model.Priority;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -98,15 +99,31 @@ public class IssueController {
 
     // 6. Get all issues in the system
     @GetMapping("/issue/all")
-    public Page<Issue> getAllIssues(@PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC
-    )Pageable pageable) {
+    public Page<Issue> getAllIssues(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) IssueStatus status,
+            @RequestParam(required = false) Priority priority,
+            @RequestParam(required = false) String department,
+            @PageableDefault(
+                    size = 10,
+                    sort = "createdAt",
+                    direction = Sort.Direction.DESC
+            )
+            Pageable pageable){
 
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
 
         String email = authentication.getName();
 
-        return issueService.getAllIssues(email, pageable);
+        return issueService.getAllIssues(
+                email,
+                search,
+                status,
+                priority,
+                department,
+                pageable
+        );
     }
 
 
