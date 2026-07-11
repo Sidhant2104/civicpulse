@@ -278,11 +278,7 @@ public class IssueService {
     }
 
     // Get all issues in the system for admin
-    public Page<Issue> getAllIssues(
-            String email,
-            String search,
-            IssueStatus status,
-            Priority priority,
+    public Page<Issue> getAllIssues(String email, String search, IssueStatus status, Priority priority,
             String department,
             Pageable pageable) {
 
@@ -297,11 +293,10 @@ public class IssueService {
             );
         }
 
-        Specification<Issue> spec = Specification.where(null);
-
-        if (status != null) {
-            spec = spec.and(IssueSpecification.hasStatus(status));
-        }
+        Specification<Issue> spec = Specification.allOf();
+//        if (status != null) {
+//            spec = spec.and(IssueSpecification.hasStatus(status));
+//        }
 
         if (priority != null) {
             spec = spec.and(IssueSpecification.hasPriority(priority));
@@ -311,7 +306,9 @@ public class IssueService {
             spec = spec.and(IssueSpecification.descriptionContains(search));
         }
 
-        // Department filter will be added next
+        if (department != null && !department.isBlank()) {
+            spec = spec.and(IssueSpecification.hasDepartment(department));
+        }
 
         return issueRepository.findAll(spec, pageable);
     }

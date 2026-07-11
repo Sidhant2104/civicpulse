@@ -28,4 +28,13 @@ public class IssueSpecification {
                         "%" + keyword.toLowerCase() + "%"
                 );
     }
+
+    public static Specification<Issue> hasDepartment(String department) {
+
+        return (root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(
+                        criteriaBuilder.lower(root.get("department").get("name")),
+                        department.toLowerCase()
+                );
+    }
 }
