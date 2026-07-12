@@ -13,6 +13,8 @@ public class Issue {
     @Id
     private String issueId;
     private String description;
+    @Column(name = "image_url")
+    private String imageUrl;
 
     @ManyToOne
     private Department department;

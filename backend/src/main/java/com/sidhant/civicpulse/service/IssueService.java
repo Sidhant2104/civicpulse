@@ -1,5 +1,6 @@
 package com.sidhant.civicpulse.service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -37,14 +38,16 @@ public class IssueService {
     private DepartmentRepository departmentRepository;
     private IssueRepository issueRepository;
     private IssueStatusHistoryRepository issueStatusHistoryRepository;
+    private final CloudinaryService cloudinaryService;
 
     public IssueService(UserRepo userRepo, DepartmentRepository departmentRepository, IssueRepository issueRepository,
-            IssueStatusHistoryRepository issueStatusHistoryRepository) {
+            IssueStatusHistoryRepository issueStatusHistoryRepository, CloudinaryService cloudinaryService) {
 
         this.userRepo = userRepo;
         this.departmentRepository = departmentRepository;
         this.issueRepository = issueRepository;
         this.issueStatusHistoryRepository = issueStatusHistoryRepository;
+        this.cloudinaryService=cloudinaryService;
 
         transitions = new HashMap<>();
 
@@ -91,14 +94,22 @@ public class IssueService {
 
 
     // Create Issue
-    public IssueResponseDto createIssue(CreateIssueRequestDto dto, String email) {
+    public IssueResponseDto createIssue(CreateIssueRequestDto dto, String email) throws IOException {
 
         // VALIDATION
         User citizen = userRepo.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
+
         if (citizen.getRole() != Role.CITIZEN) {
             throw new ForbiddenException("Only citizens can create issues");
+        }
+
+        // Upload image first
+        String imageUrl = null;
+
+        if (dto.getImage() != null && !dto.getImage().isEmpty()) {
+            imageUrl = cloudinaryService.uploadImage(dto.getImage());
         }
 
         String description = dto.getDescription();
@@ -172,11 +183,14 @@ public class IssueService {
         history.setUpdatedBy(citizen); // or creator
         history.setUpdatedAt(LocalDateTime.now());
 
+        issue.setImageUrl(imageUrl);
+
         issueStatusHistoryRepository.save(history);
 
         IssueResponseDto response = new IssueResponseDto();
         response.setMessage("Issue created Successfully!");
         response.setIssueId(issue.getIssueId());
+        response.setImageUrl(issue.getImageUrl());
         return response;
     }
 

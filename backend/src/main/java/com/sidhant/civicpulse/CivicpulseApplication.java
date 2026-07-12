@@ -11,5 +11,4 @@ public class CivicpulseApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CivicpulseApplication.class, args);
 	}
-
 }

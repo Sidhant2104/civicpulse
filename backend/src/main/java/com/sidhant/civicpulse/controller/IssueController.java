@@ -1,5 +1,6 @@
 package com.sidhant.civicpulse.controller;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -32,9 +34,9 @@ public class IssueController {
     }
 
     // 1: Create Issue
-    @PostMapping("/issue")
+    @PostMapping(value = "/issue", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public IssueResponseDto createIssue(
-            @Valid @RequestBody CreateIssueRequestDto dto) {
+            @Valid @ModelAttribute CreateIssueRequestDto dto)throws IOException {
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
 

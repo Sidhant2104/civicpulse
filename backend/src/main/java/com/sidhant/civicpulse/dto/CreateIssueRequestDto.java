@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -11,6 +12,8 @@ public class CreateIssueRequestDto {
 
     @NotBlank(message = "Description cannot be blank")
     private String description;
+
+    private MultipartFile image;
 
     @NotBlank(message = "Priority is required")
     @Pattern(
