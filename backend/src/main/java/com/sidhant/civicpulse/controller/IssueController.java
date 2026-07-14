@@ -35,14 +35,20 @@ public class IssueController {
 
     // 1: Create Issue
     @PostMapping(value = "/issue", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public IssueResponseDto createIssue(
-            @Valid @ModelAttribute CreateIssueRequestDto dto)throws IOException {
+    public ApiResponse<IssueResponseDto> createIssue(
+            @Valid @ModelAttribute CreateIssueRequestDto dto) {
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
 
         String email = authentication.getName();
 
-        return issueService.createIssue(dto, email);
+        IssueResponseDto response =
+                issueService.createIssue(dto, email);
+
+        return ApiResponse.success(
+                "Issue created successfully",
+                response
+        );
     }
 
     // 2: Update Issue Status :

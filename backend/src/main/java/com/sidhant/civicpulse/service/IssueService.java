@@ -94,7 +94,7 @@ public class IssueService {
 
 
     // Create Issue
-    public IssueResponseDto createIssue(CreateIssueRequestDto dto, String email) throws IOException {
+    public IssueResponseDto createIssue(CreateIssueRequestDto dto, String email){
 
         // VALIDATION
         User citizen = userRepo.findByEmail(email)
@@ -188,7 +188,6 @@ public class IssueService {
         issueStatusHistoryRepository.save(history);
 
         IssueResponseDto response = new IssueResponseDto();
-        response.setMessage("Issue created Successfully!");
         response.setIssueId(issue.getIssueId());
         response.setImageUrl(issue.getImageUrl());
         return response;

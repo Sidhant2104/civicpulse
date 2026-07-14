@@ -1,3 +1,7 @@
+After today's work, your tracker should be updated like this.
+
+---
+
 # CivicPulse Feature Tracker
 
 ## ✅ Completed Features
@@ -24,11 +28,12 @@
 * [x] @Valid on Controller Endpoints
 * [x] Global Exception Handler (@RestControllerAdvice)
 * [x] Custom Exceptions
-    * [x] NotFoundException
-    * [x] ForbiddenException
-    * [x] ConflictException
-    * [x] BadRequestException
-    * [x] ResourceUnavailableException
+
+  * [x] NotFoundException
+  * [x] ForbiddenException
+  * [x] ConflictException
+  * [x] BadRequestException
+  * [x] ResourceUnavailableException
 * [x] Standard HTTP Error Responses
 * [x] Authentication Exception Handling (401)
 * [x] Business RuntimeException Migration
@@ -53,8 +58,13 @@
 * [x] Issue Status Updates
 * [x] Get Single Issue API
 * [x] Get Escalated Issues API
-* [x] Issue Resolution Tracking (resolvedAt, resolvedBy)
-* [x] Issue Closure Tracking (closedAt, closedBy)
+* [x] Issue Resolution Tracking
+* [x] Issue Closure Tracking
+* [x] Dynamic Search & Filtering (Specifications)
+* [x] Multi-Filter Search API
+* [x] Pagination
+* [x] Sorting
+* [x] Issue Image Upload (Cloudinary)
 
 ---
 
@@ -90,7 +100,7 @@
 * [x] Create Issue
 * [x] Get My Issues
 * [x] Get Issue History
-* [x] Review Issue API (Approve / Reject Resolution)
+* [x] Review Issue API
 
 ---
 
@@ -106,13 +116,15 @@
 * [x] Create Official API
 * [x] View Officials API
 * [x] Update Official API
-* [x] Official Response DTO
+* [ ] Soft Delete Official
+* [ ] Restore Official
 
 ---
 
 ### Admin APIs
 
 * [x] Get All Issues
+* [x] Search & Filter Issues API
 * [x] Create Department API
 * [x] Get All Departments API
 * [x] Update Department API
@@ -136,6 +148,15 @@
 
 ---
 
+### File Uploads
+
+* [x] Upload Issue Images (Cloudinary)
+* [x] Image URL Storage
+* [ ] Multiple Attachments
+* [ ] Image Retrieval API (if separate endpoint required)
+
+---
+
 ### JWT Refactor
 
 * [x] createIssue() uses JWT user
@@ -146,16 +167,15 @@
 
 ---
 
-### Enum Migration
+### Security Improvements
 
-* [x] IssueStatus → EnumType.STRING
-* [x] Priority → EnumType.STRING
-* [x] Level → EnumType.STRING
-* [x] Role → EnumType.STRING
+* [x] JWT Secret via Environment Variables
+* [x] Database Credentials via Environment Variables
+* [x] Cloudinary Credentials via Environment Variables
 
 ---
 
-# 🧹 Technical Debt / Cleanup Later
+# 🧹 Technical Debt / Cleanup
 
 ### Department System
 
@@ -167,15 +187,15 @@
 
 ### Official Data Cleanup
 
-* [ ] Remove legacy officials with null email/phone fields
+* [ ] Remove legacy officials
 * [ ] Recreate officials through Create Official API
 
 ---
 
 ### Workflow Improvements
 
-* [ ] Configurable SLA duration based on Priority
-* [ ] Replace hardcoded SLA_MINUTES with configuration
+* [ ] Configurable SLA duration by Priority
+* [ ] Replace hardcoded SLA values
 * [ ] Resolution Remarks
 * [ ] Official Resolution Notes
 
@@ -185,23 +205,15 @@
 
 * [ ] Standard API Response Wrapper
 * [ ] Department Selection instead of Keyword Detection
-* [ ] User isActive flag
+* [ ] User `isActive` flag
 * [ ] Official Deactivation API
 * [ ] Ignore inactive officials during assignment
 
 ---
 
-# 🚀 Upcoming Features
+# 🚀 Remaining Backend Features
 
-## Search & Pagination
-
-* [ ] Search Issues API
-* [x] Pagination
-* [x] Sorting
-
----
-
-## Analytics
+### Analytics
 
 * [ ] SLA Statistics
 * [ ] Average Resolution Time
@@ -209,53 +221,26 @@
 
 ---
 
-## Administration
-
-* [ ] Soft Delete Official
-* [ ] Restore Official
-
----
-
-## File Uploads
-
-* [ ] Upload Issue Images
-* [ ] Multiple Attachments
-* [ ] Image Retrieval API
-
----
-
-## Frontend
-
-* [ ] React Setup
-* [ ] Authentication
-* [ ] Citizen Dashboard
-* [ ] Issue Creation
-* [ ] My Issues
-* [ ] Official Dashboard
-* [ ] Admin Dashboard
-* [ ] Department Management
-* [ ] Official Management
-
----
-
-## Testing
+### Testing
 
 * [x] Authentication Testing
 * [x] Dashboard Testing
 * [x] Department API Testing
 * [x] Official API Testing
-* [x] Citizen Review Workflow Testing
+* [x] Review Workflow Testing
+* [x] Search & Filtering Testing
+* [x] Cloudinary Upload Testing
 * [x] Exception Handling Testing
 * [ ] End-to-End Integration Testing
 
 ---
 
-## Deployment
+### Deployment
 
 * [ ] Backend Deployment
 * [ ] Database Deployment
 * [ ] Frontend Deployment
-* [ ] Environment Variables
+* [x] Environment Variables
 * [ ] Docker
 * [ ] Production MySQL
 * [ ] CI/CD Pipeline
@@ -266,58 +251,61 @@
 
 ## Backend Progress
 
-Authentication & Security **100%**
-
-Validation & Exception Handling **100%**
-
-User Management **100%**
-
-Issue Management **100%**
-
-Workflow Engine **100%**
-
-Escalation System **100%**
-
-Department Management **100%**
-
-Official Management **95%**
-
-Dashboards **100%**
-
-Analytics **90%**
-
-Testing **95%**
-
-Frontend **15%**
-
-Deployment **0%**
+| Module                          | Progress |
+| ------------------------------- | -------: |
+| Authentication & Security       | **100%** |
+| Validation & Exception Handling | **100%** |
+| User Management                 | **100%** |
+| Issue Management                | **100%** |
+| Workflow Engine                 | **100%** |
+| Escalation System               | **100%** |
+| Department Management           | **100%** |
+| Official Management             |  **96%** |
+| Search, Filtering & Pagination  | **100%** |
+| File Uploads                    |  **90%** |
+| Dashboards                      | **100%** |
+| Analytics                       |  **90%** |
+| Testing                         |  **97%** |
+| Frontend                        |  **15%** |
+| Deployment                      |  **15%** |
 
 ---
 
-# 🎯 Major Remaining Backend Features
+# 🎯 Remaining Backend Work
 
-* Search API
-* Pagination
-* File Uploads
-* Official Deactivation
-* Configurable SLA
+Only a few production-ready enhancements remain:
+
 * Standard API Response Wrapper
+* Official Deactivation (`isActive`)
+* Ignore inactive officials during assignment
+* Configurable SLA by Priority
+* Resolution Remarks
+* Official Resolution Notes
+* SLA Analytics
+* Department Performance Metrics
+* End-to-End Testing
 * Production Data Cleanup
 
 ---
 
-## Overall Project Progress
+# 🚀 Overall Project Progress
 
-### Backend: **97–98% Complete** ✅
+### Backend: **99% Complete** ✅
 
-The backend now has:
-- Authentication & JWT
-- Validation
-- Exception Handling
-- Complete Workflow Engine
-- Escalation System
-- Dashboards
-- Analytics
-- Tested REST APIs
+Core backend is now essentially complete.
 
-The remaining work is primarily enhancement features and production-readiness rather than core functionality.
+You now have:
+
+* ✅ Secure JWT Authentication
+* ✅ Role-Based Authorization
+* ✅ Dynamic Search & Filtering (Specifications)
+* ✅ Pagination & Sorting
+* ✅ Complete Workflow Engine
+* ✅ Multi-Level Escalation System
+* ✅ Analytics APIs
+* ✅ Cloudinary Image Upload
+* ✅ Environment Variable Based Secret Management
+* ✅ Production-style Exception Handling
+* ✅ Tested REST APIs
+
+At this point, what's left is **production hardening and enhancements**, not core backend functionality. This is a strong milestone before shifting most of your effort to the frontend and deployment.
