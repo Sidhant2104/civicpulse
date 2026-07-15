@@ -86,7 +86,6 @@ public class OfficialService {
         response.setId(savedOfficial.getId());
         response.setName(savedOfficial.getName());
         response.setEmail(savedOfficial.getEmail());
-        response.setMessage("Official created successfully");
         return response;
     }
 
@@ -131,7 +130,6 @@ public class OfficialService {
         response.setId(updatedOfficial.getId());
         response.setName(updatedOfficial.getName());
         response.setEmail(updatedOfficial.getEmail());
-        response.setMessage("Official updated successfully");
         return response;
     }
 }

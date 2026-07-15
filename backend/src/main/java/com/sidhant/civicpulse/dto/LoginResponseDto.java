@@ -12,5 +12,4 @@ public class LoginResponseDto {
     private String email;
     private String phoneNo;
     private Role role;
-    private String message;
 }

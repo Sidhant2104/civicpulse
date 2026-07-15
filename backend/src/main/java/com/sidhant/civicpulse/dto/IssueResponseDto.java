@@ -7,7 +7,6 @@ import lombok.Setter;
 @Setter
 public class IssueResponseDto {
 
-    private String message;
     private String issueId;
     private String imageUrl;
 

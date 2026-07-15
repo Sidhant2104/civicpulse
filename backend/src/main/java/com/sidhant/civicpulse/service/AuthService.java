@@ -52,7 +52,6 @@ public class AuthService {
     response.setId(savedUser.getId());
     response.setName(savedUser.getName());
     response.setEmail(savedUser.getEmail());
-    response.setMessage("User registered successfully!");
 
     return response;
     }
@@ -78,7 +77,6 @@ public class AuthService {
         response.setEmail(user.getEmail());
         response.setPhoneNo(user.getPhoneNo());
         response.setRole(user.getRole());
-        response.setMessage("Login successful");
 
         return response;
     }

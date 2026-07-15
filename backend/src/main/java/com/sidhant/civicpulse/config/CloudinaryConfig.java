@@ -21,6 +21,7 @@ public class CloudinaryConfig {
 
     @Bean
     public Cloudinary cloudinary() {
+
         return new Cloudinary(
                 Map.of(
                         "cloud_name", cloudName,

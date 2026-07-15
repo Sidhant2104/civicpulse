@@ -53,7 +53,7 @@ public class IssueController {
 
     // 2: Update Issue Status :
     @PatchMapping("/issue/{issueId}/status")
-    public UpdateIssueStatusResponseDto updateIssueStatus(
+    public ApiResponse<UpdateIssueStatusResponseDto> updateIssueStatus(
             @PathVariable String issueId,
             @RequestBody UpdateIssueStatusRequestDto dto) {
 
@@ -67,47 +67,48 @@ public class IssueController {
         issueService.updateIssueStatus(issueId, email, next);
 
         UpdateIssueStatusResponseDto response = new UpdateIssueStatusResponseDto();
-
-        response.setMessage("Status updated");
         response.setIssueId(issueId);
         response.setNewStatus(next.toString());
         response.setUpdatedAt(LocalDateTime.now());
 
-        return response;
+        return ApiResponse.success(
+                "Issue status updated successfully",
+                response
+        );
     }
 
     // 3. Get Issue History by issueId
     @GetMapping("/issue/{id}/history")
-    public List<IssueStatusHistory> getIssueHistory(@PathVariable String id){
+    public ApiResponse<List<IssueStatusHistory>> getIssueHistory(@PathVariable String id){
         List<IssueStatusHistory> history = issueService.getIssueHistory(id);
-        return history;
+        return ApiResponse.success("Issue history fetched successfully", history);
     }
 
     // 4. Get all issues of currently logged-in citizen
     @GetMapping("/issue/my")
-    public Page<Issue> getMyIssues(@PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC
+    public ApiResponse<Page<Issue>> getMyIssues(@PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC
     )Pageable pageable){
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        return issueService.getMyIssues(email, pageable);
+        return ApiResponse.success("Issues fetched successfully",issueService.getMyIssues(email,pageable));
     }
 
     // 5. Get all issues assigned to the current official
     @GetMapping("/issue/assigned")
-    public Page<Issue> getAssignedIssues(@PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC)Pageable pageable) {
+    public ApiResponse<Page<Issue>> getAssignedIssues(@PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC)Pageable pageable) {
 
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
 
         String email = authentication.getName();
 
-        return issueService.getAssignedIssues(email, pageable);
+        return ApiResponse.success("Assigned issues fetched successfully",issueService.getAssignedIssues(email, pageable));
     }
 
     // 6. Get all issues in the system
     @GetMapping("/issue/all")
-    public Page<Issue> getAllIssues(
+    public ApiResponse<Page<Issue>> getAllIssues(
             @RequestParam(required = false) String search,
             @RequestParam(required = false) IssueStatus status,
             @RequestParam(required = false) Priority priority,
@@ -124,13 +125,9 @@ public class IssueController {
 
         String email = authentication.getName();
 
-        return issueService.getAllIssues(
-                email,
-                search,
-                status,
-                priority,
-                department,
-                pageable
+        return ApiResponse.success(
+                "All issues fetched successfully",
+                issueService.getAllIssues(email, search, status, priority, department, pageable)
         );
     }
 
@@ -138,30 +135,36 @@ public class IssueController {
 
     // 7. Get single issue details
     @GetMapping("/issue/{id}")
-    public Issue getIssueById(@PathVariable String id){
+    public ApiResponse<Issue> getIssueById(@PathVariable String id){
 
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
 
         String email = authentication.getName();
 
-        return issueService.getIssueById(id, email);
+        return ApiResponse.success(
+                "Issue fetched successfully",
+                issueService.getIssueById(id, email)
+        );
     }
 
     // 8. Get all issues whose latest status is ESCALATED
     @GetMapping("/issue/escalated")
-    public List<Issue> getIssueWithEscalatedStatus(){
+    public ApiResponse<List<Issue>> getIssueWithEscalatedStatus(){
 
         List<Issue> escalatedIssues =
                 issueService.getIssueWithEscalatedStatus();
 
-        return escalatedIssues;
+        return ApiResponse.success(
+                "Escalated issues fetched successfully",
+                escalatedIssues
+        );
     }
 
 
     //Review Issues
     @PatchMapping("/issue/{issueId}/review")
-    public UpdateIssueStatusResponseDto reviewIssue(
+    public ApiResponse<UpdateIssueStatusResponseDto> reviewIssue(
             @PathVariable String issueId,
             @Valid @RequestBody ReviewIssueRequestDto dto) {
 
@@ -170,6 +173,9 @@ public class IssueController {
 
         String email = authentication.getName();
 
-        return issueService.reviewIssue(issueId, email, dto.isApproved());
+        return ApiResponse.success(
+                "Issue reviewed successfully",
+                issueService.reviewIssue(issueId, email, dto.isApproved())
+        );
     }
 }

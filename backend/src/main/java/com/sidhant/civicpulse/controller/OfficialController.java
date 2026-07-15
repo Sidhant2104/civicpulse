@@ -20,7 +20,7 @@ public class OfficialController {
 
     //1: Create Official
     @PostMapping
-    public CreateOfficialResponseDto createOfficial(
+    public ApiResponse<CreateOfficialResponseDto> createOfficial(
             @RequestBody CreateOfficialRequestDto request){
 
         Authentication authentication =
@@ -28,22 +28,34 @@ public class OfficialController {
 
         String adminEmail = authentication.getName();
 
-        return officialService.createOfficial(
-                request,
-                adminEmail
+        return ApiResponse.success(
+                "Official created successfully",
+                officialService.createOfficial(
+                        request,
+                        adminEmail
+                )
         );
     }
 
-    //2: Get Official
+    //2: Get All Officials
     @GetMapping
-    public List<GetOfficialResponseDto> getAllOfficials() {
-        return officialService.getAllOfficials();
+    public ApiResponse<List<GetOfficialResponseDto>> getAllOfficials() {
+
+        return ApiResponse.success(
+                "Officials fetched successfully",
+                officialService.getAllOfficials()
+        );
     }
 
     //3: Update Official
     @PutMapping("/{id}")
-    public CreateOfficialResponseDto updateOfficial(@PathVariable String id,@RequestBody UpdateOfficialRequestDto dto){
-        return officialService.updateOfficial(id, dto);
-    }
+    public ApiResponse<CreateOfficialResponseDto> updateOfficial(
+            @PathVariable String id,
+            @RequestBody UpdateOfficialRequestDto dto){
 
+        return ApiResponse.success(
+                "Official updated successfully",
+                officialService.updateOfficial(id, dto)
+        );
+    }
 }

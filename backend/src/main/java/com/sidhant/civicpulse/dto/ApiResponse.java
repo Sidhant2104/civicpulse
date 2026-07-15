@@ -23,4 +23,12 @@ public class ApiResponse<T> {
         response.setData(data);
         return response;
     }
+
+    public static <T> ApiResponse<T> failure(String message){
+        ApiResponse<T> response = new ApiResponse<>();
+        response.setSuccess(false);
+        response.setMessage(message);
+        response.setData(null);
+        return response;
+    }
 }

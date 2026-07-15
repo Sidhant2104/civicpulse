@@ -1,6 +1,5 @@
 package com.sidhant.civicpulse.service;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -244,7 +243,6 @@ public class IssueService {
         UpdateIssueStatusResponseDto response = new UpdateIssueStatusResponseDto();
 
         response.setIssueId(issue.getIssueId());
-        response.setMessage("Status updated successfully");
         response.setNewStatus(next.toString());
         response.setUpdatedAt(LocalDateTime.now());
 

@@ -19,49 +19,67 @@ public class DashboardController {
     }
     //1:Citizen Dashboard Controller
     @GetMapping("/dashboard/citizen")
-    public CitizenDashboardResponseDto getCitizenDashboard(){
+    public ApiResponse<CitizenDashboardResponseDto> getCitizenDashboard(){
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
 
         String email = authentication.getName();
-        return dashboardService.getCitizenDashboard(email);
+        return ApiResponse.success(
+                "Citizen dashboard fetched successfully",
+                dashboardService.getCitizenDashboard(email)
+        );
     }
 
     //2: Official Dashboard Controller
     @GetMapping("/dashboard/official")
-    public OfficialDashboardResponseDto getOfficialDashboard() {
+    public ApiResponse<OfficialDashboardResponseDto> getOfficialDashboard() {
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        return dashboardService.getOfficialDashboard(email);
+        return ApiResponse.success(
+                "Official dashboard fetched successfully",
+                dashboardService.getOfficialDashboard(email)
+        );
     }
 
     //3: Admin Dashboard Controller
     @GetMapping("/admin")
-    public AdminDashboardResponseDto getAdminDashboard(){
+    public ApiResponse<AdminDashboardResponseDto> getAdminDashboard(){
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
-        return dashboardService.getAdminDashboard(email);
+        return ApiResponse.success(
+                "Admin dashboard fetched successfully",
+                dashboardService.getAdminDashboard(email)
+        );
     }
 
     //------------------------------------------------------------------------------------//
 
     //1: Get issue statistics:
     @GetMapping("/admin/stats/issues")
-    public IssueStatisticsResponseDto getIssueStatistics(){
-        return dashboardService.getIssueStatistics();
+    public ApiResponse<IssueStatisticsResponseDto> getIssueStatistics(){
+        return ApiResponse.success(
+                "Issue statistics fetched successfully",
+                dashboardService.getIssueStatistics()
+        );
     }
 
     //2: Department Statistics
     @GetMapping("/admin/stats/departments")
-    public List<DepartmentStatisticsResponseDto> getDepartmentStatistics(){
-        return dashboardService.getDepartmentStatistics();
+    public ApiResponse<List<DepartmentStatisticsResponseDto>> getDepartmentStatistics(){
+        return ApiResponse.success(
+                "Department statistics fetched successfully",
+                dashboardService.getDepartmentStatistics()
+        );
     }
 
     //3: Escalation Statistics
     @GetMapping("/admin/stats/escalations")
-    public EscalationStatisticsResponseDto getEscalationStatistics(){
-        return dashboardService.getEscalationStatistics();
+    public ApiResponse<EscalationStatisticsResponseDto> getEscalationStatistics(){
+        return ApiResponse.success(
+                "Escalation statistics fetched successfully",
+                dashboardService.getEscalationStatistics()
+        );
     }
 }
