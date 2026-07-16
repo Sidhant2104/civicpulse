@@ -19,7 +19,7 @@ public class ApiResponse<T> {
     public static <T> ApiResponse<T> success(String message, T data) {
         ApiResponse<T> response = new ApiResponse<>();
         response.setSuccess(true);
-        response.setMessage("Issue Created");
+        response.setMessage(message);
         response.setData(data);
         return response;
     }
